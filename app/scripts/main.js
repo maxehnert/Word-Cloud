@@ -23,6 +23,7 @@ Print them out in some way.
 Yes my commenting is ugly.
 */
 
+
 let wordCloud = string => {
 
   let sortedWords = [];
@@ -61,16 +62,32 @@ let wordCloud = string => {
   sortedWords = sortedWords.sort( (a, b) => a[1] - b[1] )
                            .slice(-10);
 
+  // // Map over the array
+  // let logMap = (value, map) => {
+  //   // Write each word to the screen (easiest way to display the word cloud)
+  //   // and set a font size based on it's position in the array.
+  //   // The most frequent word will be the largest.
+  //   var fontSize = value[1] * 15;
+  //
+  //   document.write( `<div style='font-size:${fontSize}px'>${value[0]}</div>` );
+  // };
+  // sortedWords.forEach(logMap);
+
+  console.log(sortedWords)
+  return sortedWords;
+};
+
+let doSomethingWithTheArray = string => {
   // Map over the array
   let logMap = (value, map) => {
     // Write each word to the screen (easiest way to display the word cloud)
     // and set a font size based on it's position in the array.
     // The most frequent word will be the largest.
     var fontSize = value[1] * 15;
-
+    console.log(`<div style='font-size:${fontSize}px'>${value[0]}</div>`)
     document.write( `<div style='font-size:${fontSize}px'>${value[0]}</div>` );
   };
-  sortedWords.forEach(logMap);
-};
+  wordCloud(string).forEach(logMap);
+}
 
-wordCloud('aa bb Aa cc Aa bb aa bb cc dd ee ee ee ff abc abc abc bbr bbr cci cci cci cci dDe dDe DDE uu uu ');
+doSomethingWithTheArray('aa bb Aa cc Aa bb aa bb cc dd ee ee ee ff abc abc abc bbr bbr cci cci cci cci dDe dDe DDE uu uu ');
