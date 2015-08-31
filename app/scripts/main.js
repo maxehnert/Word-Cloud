@@ -28,6 +28,7 @@ let wordCloud = string => {
 
   let sortedWords = [];
   let word_object = {};
+  let word;
   /* Should think about using new Map() instead of using an object and then later creating the same key,value array. It could elminate a loop and rduce O space and time*/
 
   // Loop through our array of words
@@ -61,19 +62,6 @@ let wordCloud = string => {
   // Only keep the last 10 elements (they have the largest count)
   sortedWords = sortedWords.sort( (a, b) => a[1] - b[1] )
                            .slice(-10);
-
-  // // Map over the array
-  // let logMap = (value, map) => {
-  //   // Write each word to the screen (easiest way to display the word cloud)
-  //   // and set a font size based on it's position in the array.
-  //   // The most frequent word will be the largest.
-  //   var fontSize = value[1] * 15;
-  //
-  //   document.write( `<div style='font-size:${fontSize}px'>${value[0]}</div>` );
-  // };
-  // sortedWords.forEach(logMap);
-
-  console.log(sortedWords)
   return sortedWords;
 };
 
@@ -84,10 +72,18 @@ let doSomethingWithTheArray = string => {
     // and set a font size based on it's position in the array.
     // The most frequent word will be the largest.
     var fontSize = value[1] * 15;
-    console.log(`<div style='font-size:${fontSize}px'>${value[0]}</div>`)
-    document.write( `<div style='font-size:${fontSize}px'>${value[0]}</div>` );
+    $('.text-output-js').append(`<div class='words' style='font-size:${fontSize}px'>${value[0]}</div>`);
   };
-  wordCloud(string).forEach(logMap);
-}
 
-doSomethingWithTheArray('aa bb Aa cc Aa bb aa bb cc dd ee ee ee ff abc abc abc bbr bbr cci cci cci cci dDe dDe DDE uu uu ');
+  wordCloud(string).forEach(logMap);
+};
+
+doSomethingWithTheArray($('.text-input-js').val());
+
+$('.sumbit-btn-js').click( () => {
+  doSomethingWithTheArray($('.text-input-js').val())
+
+  d3.selectAll(".words").style("color", function() {
+    return "hsl(" + Math.random() * 360 + ",100%,50%)";
+  });
+});
