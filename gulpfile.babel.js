@@ -23,10 +23,13 @@ gulp.task('styles', () => {
     .pipe(reload({stream: true}));
 });
 
+// Added $.babel() to transpile before the lint.
+// It appears to be work based on my lint errors ;)
 function lint(files, options) {
   return () => {
     return gulp.src(files)
       .pipe(reload({stream: true, once: true}))
+      .pipe($.babel())
       .pipe($.eslint(options))
       .pipe($.eslint.format())
       .pipe($.if(!browserSync.active, $.eslint.failAfterError()));
@@ -89,7 +92,7 @@ gulp.task('extras', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-// Transpile babel first before starting serve 
+// Transpile babel first before starting serve
 gulp.task('babel', () => {
   return gulp.src(['app/scripts/**/*.js'])
     .pipe($.sourcemaps.init())

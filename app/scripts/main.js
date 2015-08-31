@@ -1,5 +1,9 @@
 "use strict";
 
+// Crate our canvas container
+var canvas = document.getElementById("canvas-container");
+var context = canvas.getContext("2d");
+
 let wordCloud = string => {
 
   let sortedWords = [];
@@ -49,24 +53,44 @@ let doSomethingWithTheArray = string => {
     // The most frequent word will be the largest.
     var fontSize = value[1] * 15;
 
-    var containerTop = $('.text-output-js').offset().top;
-    var containerLeft = $('.text-output-js').offset().left;
-    console.log('top '+  (containerTop + Math.random() * 10));
-    $('.text-output-js').append(`<div class='words' style='font-size:${fontSize}px'>${value[0]}</div>`)
-                        .offset({ top: containerTop + Math.random() * 10 ,
-                                  left: containerLeft + Math.random() * 10
-                               });
+    context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+    context.font = `bold ${fontSize}px Arial`;
+    context.fillText( value[0], Math.random() * 200 + 100 , Math.random() * 200 + 100 );
+
+    // var containerTop = $('.text-output-js').offset().top;
+    // var containerLeft = $('.text-output-js').offset().left;
+    // console.log('top '+  (containerTop + Math.random() * 10));
+    // $('.text-output-js').append(`<div class='words' style='font-size:${fontSize}px'>${value[0]}</div>`)
+    //                     .offset({ top: containerTop + Math.random() * 10 ,
+    //                               left: containerLeft + Math.random() * 10
+    //                            });
   };
 
   wordCloud(string).forEach(logMap);
 };
 
 $('.sumbit-btn-js').click( () => {
+
+  // Clear out the canvas element before adding anything else to it.
+  context.clearRect(0, 0, canvas.width, canvas.height)
+
   doSomethingWithTheArray($('.text-input-js').val())
 
-  var words = d3.selectAll(".words");
+  // var words = d3.selectAll(".words");
 
-  words.style("color", () =>
-     "hsl(" + Math.random() * 360 + ",100%,50%)"
-  );
+  // words.style("color", () =>
+  //    "hsl(" + Math.random() * 360 + ",100%,50%)"
+  // );
 });
+
+
+/*
+<canvas id="e" width="200" height="200"></canvas>
+<script>
+  var canvas = document.getElementById("canvas-container");
+  var context = canvas.getContext("2d");
+  context.fillStyle = "hsl(" + Math.random() * 360 + ",100%,50%)";
+  context.font = "bold 16px Arial";
+  context.fillText("Zibri", 100, 100);
+</script>
+*/
