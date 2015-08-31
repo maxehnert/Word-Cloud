@@ -72,7 +72,12 @@ let doSomethingWithTheArray = string => {
     // and set a font size based on it's position in the array.
     // The most frequent word will be the largest.
     var fontSize = value[1] * 15;
-    $('.text-output-js').append(`<div class='words' style='font-size:${fontSize}px'>${value[0]}</div>`);
+
+    var containerTop = $('.text-output-js').offset().top;
+    var containerLeft = $('.text-output-js').offset().left;
+
+    $('.text-output-js').append(`<div class='words' style='font-size:${fontSize}px'>${value[0]}</div>`)
+                        .offset({ top: containerTop + Math.random() * 10 , left: containerLeft + Math.random() * 10 });
   };
 
   wordCloud(string).forEach(logMap);
@@ -83,7 +88,9 @@ doSomethingWithTheArray($('.text-input-js').val());
 $('.sumbit-btn-js').click( () => {
   doSomethingWithTheArray($('.text-input-js').val())
 
-  d3.selectAll(".words").style("color", function() {
-    return "hsl(" + Math.random() * 360 + ",100%,50%)";
-  });
+  var words = d3.selectAll(".words");
+
+  words.style("color", () =>
+     "hsl(" + Math.random() * 360 + ",100%,50%)"
+  );
 });
