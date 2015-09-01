@@ -1,7 +1,11 @@
 Road Map
 
 - Font size are too big right now. I need to have a real structure for font size.
+
 - I'm still only keeping 10 words so I can more easily work with the data, but would like to increase which will affect the next point.
+
 - I need to have realistic structure to placing the words in the canvas element without overlap.
+
 - It needs to 'look random' but not actually be random. When it is random, they group too much. I need them to be randomly placed but each time remove the possibility of using the space that was already taken by the previous words.
+
 *Note: Jason Davies states this for his word cloud: Instead, we draw each word to a hidden canvas element, and retrieve the pixel data.

@@ -31,10 +31,10 @@ let wordCloud = string => {
   // Loop through our word object so you can put them into an array
   for( word in word_object ) {
     // Setup some regex to stop any punctuation, numbers, or weird characters from getting through
-    let valid_letters = /[a-z]/;
+    let validLetters = /[a-z]/;
 
     // Push each key,value into an array of arrays
-    if( valid_letters.test(word[0]) ) {
+    if( validLetters.test(word) ) {
     	sortedWords.push( [word, word_object[word]] );
     }
   }
