@@ -1,6 +1,6 @@
 "use strict";
 
-// Crate our canvas container
+// Create our canvas container
 var canvas = document.getElementById("canvas-container");
 var context = canvas.getContext("2d");
 
@@ -46,24 +46,24 @@ let wordCloud = string => {
 };
 
 let doSomethingWithTheArray = string => {
+  let countItems = 0;
   // Map over the array
   let logMap = (value, map) => {
-    // Write each word to the screen (easiest way to display the word cloud)
-    // and set a font size based on it's position in the array.
-    // The most frequent word will be the largest.
-    var fontSize = value[1] * 15;
 
+    countItems = (map - countItems + 1);
+
+    // set a font size based on it's position in the array.
+    // The most frequent word will be the largest.
+    var word = value[0];
+    var fontSize = value[1];
+
+
+    console.log(map);
+    console.log(value);
     context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
     context.font = `bold ${fontSize}px Arial`;
-    context.fillText( value[0], Math.random() * 200 + 100 , Math.random() * 200 + 100 );
+    context.fillText( word, Math.random() * 200 + 100 , Math.random() * 200 + 100 );
 
-    // var containerTop = $('.text-output-js').offset().top;
-    // var containerLeft = $('.text-output-js').offset().left;
-    // console.log('top '+  (containerTop + Math.random() * 10));
-    // $('.text-output-js').append(`<div class='words' style='font-size:${fontSize}px'>${value[0]}</div>`)
-    //                     .offset({ top: containerTop + Math.random() * 10 ,
-    //                               left: containerLeft + Math.random() * 10
-    //                            });
   };
 
   wordCloud(string).forEach(logMap);
@@ -82,15 +82,3 @@ $('.sumbit-btn-js').click( () => {
   //    "hsl(" + Math.random() * 360 + ",100%,50%)"
   // );
 });
-
-
-/*
-<canvas id="e" width="200" height="200"></canvas>
-<script>
-  var canvas = document.getElementById("canvas-container");
-  var context = canvas.getContext("2d");
-  context.fillStyle = "hsl(" + Math.random() * 360 + ",100%,50%)";
-  context.font = "bold 16px Arial";
-  context.fillText("Zibri", 100, 100);
-</script>
-*/
