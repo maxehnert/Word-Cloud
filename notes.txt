@@ -9,3 +9,12 @@ Road Map
 - It needs to 'look random' but not actually be random. When it is random, they group too much. I need them to be randomly placed but each time remove the possibility of using the space that was already taken by the previous words.
 
 *Note: Jason Davies states this for his word cloud: Instead, we draw each word to a hidden canvas element, and retrieve the pixel data.
+Found another person doing a JS word cloud who uses the same approach but with the help of an external library. This is the simplest approach I can think of currently.
+http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
+
+- Going by the above if I create separate canvas elements for each word I can then place them in the single large canvas and before placing the next one run a check to make sure there is no overlap. 
+[ if (RectA.X1 < RectB.X2 && RectA.X2 > RectB.X1 &&
+    RectA.Y1 < RectB.Y2 && RectA.Y2 > RectB.Y1) ]
+
+- 16px to 1em so multiply em by 16 to get total pixel height of word.
+- 11px to 1rem; everything I can find says rem is the same hieght-to-pixel as em but I'm seeing a difference in 5px.
