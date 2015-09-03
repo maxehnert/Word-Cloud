@@ -74,17 +74,18 @@ let doSomethingWithTheArray = string => {
     console.log(value);
     context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
     context.font = `bold ${fontSize}rem Arial`;
-    context.fillText( word, Math.random() * 200 + 100 , Math.random() * 200 + 100 );
+
+    let wordPositionFromTop = Math.random() * 200 + 100;
+    let wordPositionFromLeft = Math.random() * 200 + 100;
+
+    //context.fillText( word, Math.random() * 200 + 100 , Math.random() * 200 + 100 );
+    context.fillText( word, wordPositionFromTop , wordPositionFromLeft );
+    let wordPosition = context.fillText( word, wordPositionFromTop , wordPositionFromLeft );
+    console.log(wordPosition.isPointInStroke(wordPositionFromTop,wordPositionFromLeft));
 
     // trying to get dimensions.
     var metrics = context.measureText(word);
-    var height = metrics.height;
-      var width = metrics.width;
-      var blah = metrics.actualBoundingBoxLeft;
-      console.log(metrics);
-      console.log('width '+ width);
-      console.log('actualBoundingBoxLeft '+ blah);
-      console.log('height '+ height);
+    console.log(metrics);
   };
 
   wordCloud(string).forEach(logMap);
