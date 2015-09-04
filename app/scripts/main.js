@@ -67,35 +67,12 @@ let doSomethingWithTheArray = string => {
 
     console.log(value);
 
-    // // this set random color for the word
-    // context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
-    //
-    // // creating the font characteristics
-    // // size noted above
-    // context.font = `bold ${fontSize}em Arial`;
-    //
-    // let wordPositionFromTop = Math.random() * 200 + 100;
-    // let wordPositionFromLeft = Math.random() * 200 + 100;
-    //
-    // //context.fillText( word, Math.random() * 200 + 100 , Math.random() * 200 + 100 );
-    // context.fillText( word, wordPositionFromTop , wordPositionFromLeft );
-    //
-    //
-    // // tells you the width of the element
-    // var metrics = context.measureText(word);
-    // console.log(metrics);
-
-
-    /*
-     * Testing crerating multiple canvas els for each word
-    */
-
+    // Dynamically create Canvas elements for each word
     var canvas = document.createElement('canvas');
     canvas.className = "temp-word-canvas";
     canvas.id = word;
     canvas.style.zIndex = 8;
     canvas.style.position = "absolute";
-    //canvas.style.border = "1px solid";
     //canvas.style.display = "none";
 
     var bodyTest = document.getElementsByTagName("body")[0];
@@ -108,7 +85,9 @@ let doSomethingWithTheArray = string => {
 
     //TODO: This work for right now for getting the whole word in the element, but better to add a checker /A-Z/ and f,g,j,p and add height and offset based on a needed param.
     canvas.height = fontSize + 5;
+    // size noted above
     context.font = `bold ${fontSize}px Arial`;
+    // this set random color for the word
     context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
     context.textBaseline = "hanging";
     context.fillText( word, 0, 5);
@@ -132,9 +111,19 @@ let pushWordCanvasToMain = () => {
   //
   // So we're doing the old way with a for loop
   for (let i = 0; i < wordCanvasArray.length; i++) {
-      console.log(wordCanvasArray[i]);
+      console.log(wordCanvasArray[i].id);
       contextContainer.drawImage(wordCanvasArray[i], 10, 10);
+
+      // temporary hack to remove the temporary canvas elements
+      // I was getting a race condition here so I just needed a slight delay
+      setInterval(() => {
+        var node = document.getElementById(wordCanvasArray[i].id);
+        if (node.parentNode) {
+          node.parentNode.removeChild(node);
+        };
+      }, 1);
   };
+
 }
 
 // Event listenser for our submit buton
