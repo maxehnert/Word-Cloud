@@ -24,8 +24,10 @@ http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-ea
 - 16px to 1em so multiply em by 16 to get total pixel height of word.
 - 11px to 1rem; everything I can find says rem is the same height-to-pixel as em but I'm seeing a difference in 5px.
 
-1. create individual canvas elements for each word. 2. store them in an array
+1. create individual canvas elements for each word. - done
+ 2. store them in an array
+ - done
 3. map over the array and place them all in 1 new large canvas
 4. using the above check to make sure there is no overlap
 5. ???
-6. new project 
+6. new project

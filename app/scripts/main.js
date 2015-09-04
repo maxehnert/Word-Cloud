@@ -64,8 +64,8 @@ let doSomethingWithTheArray = string => {
      * 0 is the lowest count word
      */
     if (map == 0) {
-      var fontSize = map + 0.5;
-    } else var fontSize = map;
+      var fontSize = map + 0.5 * 16;
+    } else var fontSize = map * 16;
   //  console.log(map);
 
     console.log(value);
@@ -94,31 +94,28 @@ let doSomethingWithTheArray = string => {
     */
 
     var canvas = document.createElement('canvas');
-        //document.createElement('canvas');
-
-    canvas.className = "CursorLayer "+ word;
+    canvas.className = "temp-word-canvas";
     canvas.id = word;
-
     canvas.style.zIndex = 8;
     canvas.style.position = "absolute";
-
-    canvas.style.border = "1px solid";
+    //canvas.style.border = "1px solid";
+    canvas.style.display = "none";
 
     var bodyTest = document.getElementsByTagName("body")[0];
     bodyTest.appendChild(canvas);
     var canvas = document.getElementById(word);
     var context = canvas.getContext("2d");
-        context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
-        context.font = "bold 20px Arial";
+        context.font = `bold ${fontSize}px Arial`;
     console.log(context.measureText(word).width);
     canvas.width = context.measureText(word).width;
-    canvas.height = 15;
-        context.font = `bold ${fontSize}em Arial`;
+    //TODO: This work for right now for getting the whole word in the element, but better to add a checker /A-Z/ and f,g,j,p and add height and offset based on a needed param.
+    canvas.height = fontSize + 5;
+        context.font = `bold ${fontSize}px Arial`;
+        context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
         context.textBaseline = "hanging";
-        context.fillText( word, 0, 0);
-    //canvas.height = context.fontSize;
+        context.fillText( word, 0, 5);
 
-    var cursorLayer = document.getElementsByClassName("CursorLayer");
+    var cursorLayer = document.getElementsByClassName("temp-word-canvas");
 
     console.log(cursorLayer);
 
