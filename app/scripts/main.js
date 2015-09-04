@@ -50,10 +50,7 @@ let doSomethingWithTheArray = string => {
   // Map over the array
   let logMap = (value, map) => {
 
-
     var word = value[0];
-
-
 
     /* set a font size based on it's position in the array.
      * The most frequent word will be the largest.
@@ -63,9 +60,9 @@ let doSomethingWithTheArray = string => {
     if (map == 0) {
       var fontSize = map + 0.5 * 16;
     } else var fontSize = map * 16;
-    //  console.log(map);
+      //console.log(map);
 
-    console.log(value);
+    //console.log(value);
 
     // Dynamically create Canvas elements for each word
     var canvas = document.createElement('canvas');
@@ -73,7 +70,7 @@ let doSomethingWithTheArray = string => {
     canvas.id = word;
     canvas.style.zIndex = 8;
     canvas.style.position = "absolute";
-    //canvas.style.display = "none";
+    canvas.style.display = "none";
 
     var bodyTest = document.getElementsByTagName("body")[0];
     bodyTest.appendChild(canvas);
@@ -92,42 +89,33 @@ let doSomethingWithTheArray = string => {
     context.textBaseline = "hanging";
     context.fillText( word, 0, 5);
 
-    // When all the words are placed into canvas el then push them into the main canvas
-    //TODO: make this better by using the wordCloud array instead of hard coded length
-    if(document.getElementsByClassName("temp-word-canvas").length == 10) {
-      pushWordCanvasToMain();
-    };
   };
 
   wordCloud(string).forEach(logMap);
+
+  // Make sure this only runs when we have all the words in their own canvas el
+  if( document.getElementsByClassName("temp-word-canvas").length == wordCloud(string).length) {
+    pushWordCanvasToMain();
+  };
 };
 
 let pushWordCanvasToMain = () => {
 
-  let wordCanvasArray = document.getElementsByClassName('temp-word-canvas');
+  let wordCanvasArray = [].slice.call(document.getElementsByClassName('temp-word-canvas'));
+  let bodyTest = document.getElementsByTagName("body")[0];
 
   // for..of not working here with error message:
   // TypeError: wordCanvasArray[Symbol.iterator] is not a function
   //
   // So we're doing the old way with a for loop
-  for (let i = 0; i < wordCanvasArray.length; i++) {
-      console.log(wordCanvasArray[i].id);
+  for ( let i = 0; i < wordCanvasArray.length; i++ ) {
       contextContainer.drawImage(wordCanvasArray[i], 10, 10);
-
-      // temporary hack to remove the temporary canvas elements
-      // I was getting a race condition here so I just needed a slight delay
-      setInterval(() => {
-        var node = document.getElementById(wordCanvasArray[i].id);
-        if (node.parentNode) {
-          node.parentNode.removeChild(node);
-        };
-      }, 1);
+      bodyTest.removeChild(wordCanvasArray[i]);
   };
-
-}
+};
 
 // Event listenser for our submit buton
-let submitButton = document.getElementsByClassName('sumbit-btn-js')
-  submitButton[0].addEventListener("click", () => {
-    doSomethingWithTheArray(document.querySelector('textarea').value);
-    }, false);
+let submitButton = document.getElementsByClassName('sumbit-btn-js');
+submitButton[0].addEventListener("click", () => {
+  doSomethingWithTheArray(document.querySelector('textarea').value);
+}, false);

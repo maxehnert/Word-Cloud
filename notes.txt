@@ -1,7 +1,5 @@
 Road Map
 
-- Font size are too big right now. I need to have a real structure for font size.
-
 - I'm still only keeping 10 words so I can more easily work with the data, but would like to increase which will affect the next point.
 
 - I need to have realistic structure to placing the words in the canvas element without overlap.
@@ -20,9 +18,6 @@ http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-ea
       RectA.Y1 < RectB.Y2 &&
       RectA.Y2 > RectB.Y1)
 ]
-
-- 16px to 1em so multiply em by 16 to get total pixel height of word.
-- 11px to 1rem; everything I can find says rem is the same height-to-pixel as em but I'm seeing a difference in 5px.
 
 1. create individual canvas elements for each word. - done
  2. store them in an array
