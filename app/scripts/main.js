@@ -1,8 +1,6 @@
 "use strict";
 
 // Create our canvas container
-//var canvas = document.getElementById("canvas-container");
-//var context = canvas.getContext("2d");
 var canvasContainer = document.getElementById("canvas-container");
 var contextContainer = canvasContainer.getContext("2d");
 
@@ -133,17 +131,14 @@ let pushWordCanvasToMain = () => {
   // TypeError: wordCanvasArray[Symbol.iterator] is not a function
   //
   // So we're doing the old way with a for loop
-  for (var i = 0; i < wordCanvasArray.length; i++) {
+  for (let i = 0; i < wordCanvasArray.length; i++) {
       console.log(wordCanvasArray[i]);
       contextContainer.drawImage(wordCanvasArray[i], 10, 10);
   };
 }
 
-$('.sumbit-btn-js').click( () => {
-
-  // Clear out the canvas element before adding anything else to it.
-  //context.clearRect(0, 0, canvas.width, canvas.height)
-
-  doSomethingWithTheArray($('.text-input-js').val());
-
-});
+// Event listenser for our submit buton
+let submitButton = document.getElementsByClassName('sumbit-btn-js')
+  submitButton[0].addEventListener("click", () => {
+    doSomethingWithTheArray(document.querySelector('textarea').value);
+    }, false);
