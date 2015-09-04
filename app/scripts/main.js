@@ -3,6 +3,8 @@
 // Create our canvas container
 //var canvas = document.getElementById("canvas-container");
 //var context = canvas.getContext("2d");
+var canvasContainer = document.getElementById("canvas-container");
+var contextContainer = canvasContainer.getContext("2d");
 
 let wordCloud = string => {
 
@@ -47,12 +49,9 @@ let wordCloud = string => {
 
 let doSomethingWithTheArray = string => {
 
-  let countItems = 0;
-
   // Map over the array
   let logMap = (value, map) => {
 
-    countItems = (map - countItems + 1);
 
     var word = value[0];
 
@@ -99,14 +98,14 @@ let doSomethingWithTheArray = string => {
     canvas.style.zIndex = 8;
     canvas.style.position = "absolute";
     //canvas.style.border = "1px solid";
-    canvas.style.display = "none";
+    //canvas.style.display = "none";
 
     var bodyTest = document.getElementsByTagName("body")[0];
     bodyTest.appendChild(canvas);
     var canvas = document.getElementById(word);
     var context = canvas.getContext("2d");
         context.font = `bold ${fontSize}px Arial`;
-    console.log(context.measureText(word).width);
+    //console.log(context.measureText(word).width);
     canvas.width = context.measureText(word).width;
     //TODO: This work for right now for getting the whole word in the element, but better to add a checker /A-Z/ and f,g,j,p and add height and offset based on a needed param.
     canvas.height = fontSize + 5;
@@ -115,21 +114,47 @@ let doSomethingWithTheArray = string => {
         context.textBaseline = "hanging";
         context.fillText( word, 0, 5);
 
-    var cursorLayer = document.getElementsByClassName("temp-word-canvas");
+    // this isn't really doing shit, just used to inspect the canvas elements in the console.
+    var arrayOfCanvasWords =
+     document.getElementsByClassName("temp-word-canvas");
 
-    console.log(cursorLayer);
-
+    //console.log(arrayOfCanvasWords);
+if(arrayOfCanvasWords.length == 10) {
+  pushWordCanvasToMain(arrayOfCanvasWords);
+}
+//pushWordCanvasToMain(arrayOfCanvasWords);
   };
 
   wordCloud(string).forEach(logMap);
 };
+
+let pushWordCanvasToMain = (params) => {
+
+  let wordCanvasArray = document.getElementsByClassName('temp-word-canvas');
+//////
+  var unboundSlice = Array.prototype.slice;
+var slice = Function.prototype.call.bind(unboundSlice);
+
+function list() {
+  return slice(arguments);
+}
+var list1 = list(wordCanvasArray);
+/////
+  for( let canvas of list1) {
+    contextContainer.drawImage(canvas, 10, 10);
+    console.log(canvas);
+  }
+
+
+
+}
 
 $('.sumbit-btn-js').click( () => {
 
   // Clear out the canvas element before adding anything else to it.
   //context.clearRect(0, 0, canvas.width, canvas.height)
 
-  doSomethingWithTheArray($('.text-input-js').val())
+  doSomethingWithTheArray($('.text-input-js').val());
 
   // var words = d3.selectAll(".words");
 
