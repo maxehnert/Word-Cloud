@@ -1,8 +1,8 @@
 "use strict";
 
 // Create our canvas container
-var canvas = document.getElementById("canvas-container");
-var context = canvas.getContext("2d");
+//var canvas = document.getElementById("canvas-container");
+//var context = canvas.getContext("2d");
 
 let wordCloud = string => {
 
@@ -54,8 +54,6 @@ let doSomethingWithTheArray = string => {
 
     countItems = (map - countItems + 1);
 
-
-
     var word = value[0];
 
 
@@ -68,24 +66,62 @@ let doSomethingWithTheArray = string => {
     if (map == 0) {
       var fontSize = map + 0.5;
     } else var fontSize = map;
-
-
   //  console.log(map);
+
     console.log(value);
-    context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
-    context.font = `bold ${fontSize}rem Arial`;
 
-    let wordPositionFromTop = Math.random() * 200 + 100;
-    let wordPositionFromLeft = Math.random() * 200 + 100;
+    // // this set random color for the word
+    // context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+    //
+    // // creating the font characteristics
+    // // size noted above
+    // context.font = `bold ${fontSize}em Arial`;
+    //
+    // let wordPositionFromTop = Math.random() * 200 + 100;
+    // let wordPositionFromLeft = Math.random() * 200 + 100;
+    //
+    // //context.fillText( word, Math.random() * 200 + 100 , Math.random() * 200 + 100 );
+    // context.fillText( word, wordPositionFromTop , wordPositionFromLeft );
+    //
+    //
+    // // tells you the width of the element
+    // var metrics = context.measureText(word);
+    // console.log(metrics);
 
-    //context.fillText( word, Math.random() * 200 + 100 , Math.random() * 200 + 100 );
-    context.fillText( word, wordPositionFromTop , wordPositionFromLeft );
-    let wordPosition = context.fillText( word, wordPositionFromTop , wordPositionFromLeft );
-    console.log(wordPosition.isPointInStroke(wordPositionFromTop,wordPositionFromLeft));
 
-    // trying to get dimensions.
-    var metrics = context.measureText(word);
-    console.log(metrics);
+    /*
+     * Testing crerating multiple canvas els for each word
+    */
+
+    var canvas = document.createElement('canvas');
+        //document.createElement('canvas');
+
+    canvas.className = "CursorLayer "+ word;
+    canvas.id = word;
+
+    canvas.style.zIndex = 8;
+    canvas.style.position = "absolute";
+
+    canvas.style.border = "1px solid";
+
+    var bodyTest = document.getElementsByTagName("body")[0];
+    bodyTest.appendChild(canvas);
+    var canvas = document.getElementById(word);
+    var context = canvas.getContext("2d");
+        context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+        context.font = "bold 20px Arial";
+    console.log(context.measureText(word).width);
+    canvas.width = context.measureText(word).width;
+    canvas.height = 15;
+        context.font = `bold ${fontSize}em Arial`;
+        context.textBaseline = "hanging";
+        context.fillText( word, 0, 0);
+    //canvas.height = context.fontSize;
+
+    var cursorLayer = document.getElementsByClassName("CursorLayer");
+
+    console.log(cursorLayer);
+
   };
 
   wordCloud(string).forEach(logMap);
@@ -94,7 +130,7 @@ let doSomethingWithTheArray = string => {
 $('.sumbit-btn-js').click( () => {
 
   // Clear out the canvas element before adding anything else to it.
-  context.clearRect(0, 0, canvas.width, canvas.height)
+  //context.clearRect(0, 0, canvas.width, canvas.height)
 
   doSomethingWithTheArray($('.text-input-js').val())
 
