@@ -28,6 +28,7 @@ http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-ea
  2. store them in an array
  - done
 3. map over the array and place them all in 1 new large canvas
+- done
 4. using the above check to make sure there is no overlap
 5. ???
 6. new project

@@ -65,7 +65,7 @@ let doSomethingWithTheArray = string => {
     if (map == 0) {
       var fontSize = map + 0.5 * 16;
     } else var fontSize = map * 16;
-  //  console.log(map);
+    //  console.log(map);
 
     console.log(value);
 
@@ -104,49 +104,39 @@ let doSomethingWithTheArray = string => {
     bodyTest.appendChild(canvas);
     var canvas = document.getElementById(word);
     var context = canvas.getContext("2d");
-        context.font = `bold ${fontSize}px Arial`;
+    context.font = `bold ${fontSize}px Arial`;
     //console.log(context.measureText(word).width);
     canvas.width = context.measureText(word).width;
+
     //TODO: This work for right now for getting the whole word in the element, but better to add a checker /A-Z/ and f,g,j,p and add height and offset based on a needed param.
     canvas.height = fontSize + 5;
-        context.font = `bold ${fontSize}px Arial`;
-        context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
-        context.textBaseline = "hanging";
-        context.fillText( word, 0, 5);
+    context.font = `bold ${fontSize}px Arial`;
+    context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+    context.textBaseline = "hanging";
+    context.fillText( word, 0, 5);
 
-    // this isn't really doing shit, just used to inspect the canvas elements in the console.
-    var arrayOfCanvasWords =
-     document.getElementsByClassName("temp-word-canvas");
-
-    //console.log(arrayOfCanvasWords);
-if(arrayOfCanvasWords.length == 10) {
-  pushWordCanvasToMain(arrayOfCanvasWords);
-}
-//pushWordCanvasToMain(arrayOfCanvasWords);
+    // When all the words are placed into canvas el then push them into the main canvas
+    //TODO: make this better by using the wordCloud array instead of hard coded length
+    if(document.getElementsByClassName("temp-word-canvas").length == 10) {
+      pushWordCanvasToMain();
+    };
   };
 
   wordCloud(string).forEach(logMap);
 };
 
-let pushWordCanvasToMain = (params) => {
+let pushWordCanvasToMain = () => {
 
   let wordCanvasArray = document.getElementsByClassName('temp-word-canvas');
-//////
-  var unboundSlice = Array.prototype.slice;
-var slice = Function.prototype.call.bind(unboundSlice);
 
-function list() {
-  return slice(arguments);
-}
-var list1 = list(wordCanvasArray);
-/////
-  for( let canvas of list1) {
-    contextContainer.drawImage(canvas, 10, 10);
-    console.log(canvas);
-  }
-
-
-
+  // for..of not working here with error message:
+  // TypeError: wordCanvasArray[Symbol.iterator] is not a function
+  //
+  // So we're doing the old way with a for loop
+  for (var i = 0; i < wordCanvasArray.length; i++) {
+      console.log(wordCanvasArray[i]);
+      contextContainer.drawImage(wordCanvasArray[i], 10, 10);
+  };
 }
 
 $('.sumbit-btn-js').click( () => {
@@ -156,9 +146,4 @@ $('.sumbit-btn-js').click( () => {
 
   doSomethingWithTheArray($('.text-input-js').val());
 
-  // var words = d3.selectAll(".words");
-
-  // words.style("color", () =>
-  //    "hsl(" + Math.random() * 360 + ",100%,50%)"
-  // );
 });
