@@ -101,17 +101,15 @@ let doSomethingWithTheArray = string => {
 
 let pushWordCanvasToMain = () => {
 
+  // This is a live node list, not a real array so we must convert it before we can work with it.
   let wordCanvasArray = [].slice.call(document.getElementsByClassName('temp-word-canvas'));
   let bodyTest = document.getElementsByTagName("body")[0];
 
-  // for..of not working here with error message:
-  // TypeError: wordCanvasArray[Symbol.iterator] is not a function
-  //
-  // So we're doing the old way with a for loop
-  for ( let i = 0; i < wordCanvasArray.length; i++ ) {
-      contextContainer.drawImage(wordCanvasArray[i], 10, 10);
-      bodyTest.removeChild(wordCanvasArray[i]);
-  };
+    // canvas represents the actual canvas elements
+    for( let canvas of wordCanvasArray ) {
+      contextContainer.drawImage( canvas, 10, 10);
+      bodyTest.removeChild(canvas);
+    };
 };
 
 // Event listenser for our submit buton
