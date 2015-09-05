@@ -58,7 +58,7 @@ let wordCloud = string => {
  * Use the array of [[word, count],..] to construct individual canvas elements for each word.
  * Add styling to the words also.
 */
-let doSomethingWithTheArray = string => {
+let wordInputArray = string => {
 
   // Map over the array
   let logMap = (value, map) => {
@@ -124,7 +124,12 @@ let pushWordCanvasToMain = () => {
 
     // canvas represents the actual canvas elements.
     for( let canvas of wordCanvasArray ) {
-      contextContainer.drawImage( canvas, 10, 10 );
+      console.log(canvas);
+      console.log(canvas['height']);
+
+        var height = (Math.floor(Math.random() * 500));
+        var width = (Math.floor(Math.random() * 1000));
+      contextContainer.drawImage( canvas, width, height );
       bodyTest.removeChild(canvas);
     };
 };
@@ -135,5 +140,8 @@ let pushWordCanvasToMain = () => {
 let submitButton = document.getElementsByClassName('sumbit-btn-js');
 
 submitButton[0].addEventListener("click", () => {
-  doSomethingWithTheArray(document.querySelector('textarea').value);
+  // Clear out the main canvas before push new words in on subsequent clicks.
+  contextContainer.clearRect(0,0,1000,500);
+
+  wordInputArray(document.querySelector('textarea').value);
 }, false);
