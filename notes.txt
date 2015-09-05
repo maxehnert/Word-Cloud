@@ -19,6 +19,37 @@ http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-ea
       RectA.Y2 > RectB.Y1)
 ]
 
+-----
+Let's build some dimensions:
+
+Main canvas is width: 1000, height: 500
+
+dimensions from positionArr:
+
+canvas['id’]: ‘starting'
+canvas['width’]: 528
+canvas['height’]: 149
+positionX: 44
+positionY: 455
+
+X
+44 through (44 + 528)
+
+Y
+455 through (455 + 149)
+
+Top Left:
+44, 455
+
+Top Right:
+(44 + 528), 455
+
+Bottom Left:
+44, (455 + 149)
+
+Bottom Right:
+(44 + 528), (455 + 149)
+-----
 1. create individual canvas elements for each word. - done
  2. store them in an array
  - done

@@ -31,8 +31,8 @@ let wordCloud = string => {
     // If it's Not a new word, just increment it.
     else {
     	wordObject[word] += 1;
-    }
-  }
+    };
+  };
 
   // Loop through our word object so you can put them into an array.
   for( word in wordObject ) {
@@ -119,19 +119,65 @@ let wordInputArray = string => {
 let pushWordCanvasToMain = () => {
 
   // This is a live node list, not a real array so we must convert it before we can work with it.
+  // This array is built smallest word to largest
   let wordCanvasArray = [].slice.call( document.getElementsByClassName('temp-word-canvas') );
+  // Reverse the order because we want to print the largest word first and sort around it
+  wordCanvasArray = wordCanvasArray.reverse();
   let bodyTest = document.getElementsByTagName("body")[0];
 
+  let positionArr = [];
     // canvas represents the actual canvas elements.
     for( let canvas of wordCanvasArray ) {
+
       console.log(canvas);
       console.log(canvas['height']);
 
-        var height = (Math.floor(Math.random() * 500));
-        var width = (Math.floor(Math.random() * 1000));
-      contextContainer.drawImage( canvas, width, height );
+
+      let canvasPostions = createCanvasPositions();
+
+      let topLeft = [ canvasPostions[0], canvasPostions[1] ]; //x1, y1
+      let bottomRight = [ ( canvasPostions[0] + canvas['width'] ), canvasPostions[1] ]; // x2, y2
+
+      positionArr.push( [ canvas['id'], canvas['width'], canvas['height'], canvasPostions[0], canvasPostions[1], topLeft, bottomRight ] );
+
+      console.log(positionArr); //Array[10] -> Array[7] == canvas['id'], canvas['width'], canvas['height'], positionX, positionY, topLeft, bottomRight
+
+      for(let word of positionArr) {
+        // word[5] == topLeft array
+        // word[6] == bottomRight array
+
+        /*
+         * Overlap Detection
+         * I'm using swapped signs from my test case because I only want the word to print
+         * if there is NOT an overlap.
+         * If there IS overlap then I will generate new coordinates.
+         * Repeate this until it places the word.
+         * If the run time gets too long I will start excluding taken ranges from the random num generator.
+        */
+        // if( topleft[0] > word[6][0] ||
+        //     bottomRight[0] < word[5][0] ||
+        //     topleft[1] > word[6][1] ||
+        //     bottomRight[1] < word[5][1] ) {
+        //     ////////////////////////////
+        //
+        //     // There is no collision so push the word into the canvas
+        //     }
+
+      }
+
+      contextContainer.drawImage( canvas, canvasPostions[0], canvasPostions[1] );
       bodyTest.removeChild(canvas);
     };
+};
+
+/*
+ * Generate random coodinates based on the main canvas element.
+*/
+let createCanvasPositions = () => {
+  let positionX = ( Math.floor(Math.random() * canvasContainer['width']) );
+  let positionY = ( Math.floor(Math.random() * canvasContainer['height']) );
+
+  return [positionX, positionY];
 };
 
 /*
