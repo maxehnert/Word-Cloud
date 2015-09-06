@@ -3,10 +3,7 @@
 // Setup our main canvas container.
 var canvasContainer = document.getElementById("canvas-container");
 var contextContainer = canvasContainer.getContext("2d");
-var count1 = 0;
-var count2 = 0;
-var count3 = 0;
-
+var count = 0;
 /*
  * Main function for parsing the block of text and pulling out the 10 most used words.
 */
@@ -140,47 +137,80 @@ let pushWordCanvasToMain = () => {
       let canvasPostions = createCanvasPositions();
 
       let topLeft = [ canvasPostions[0], canvasPostions[1] ]; //x1, y1
-      let bottomRight = [ ( canvasPostions[0] + canvas['width'] ), canvasPostions[1] ]; // x2, y2
+      let bottomRight = [ ( canvasPostions[0] + canvas['width'] ), ( canvasPostions[1] + canvas['height'] ) ]; // x2, y2
 
       positionArr.push( [ canvas['id'], canvas['width'], canvas['height'], canvasPostions[0], canvasPostions[1], topLeft, bottomRight ] );
 
       console.log(positionArr); //Array[10] -> Array[7] == canvas['id'], canvas['width'], canvas['height'], positionX, positionY, topLeft, bottomRight
 
       let iteratePostionArr = positionArr.entries();
-      let wordy;
-      restartLoop:
-      while (!( wordy = iteratePostionArr.next()).done && positionArr.length > 1) {
+      //let wordy;
+      let wordy = iteratePostionArr.next();
+
+    restartLoop:  while(canvas && positionArr.length > 1) {
+    //  while (!( wordy = iteratePostionArr.next()).done && positionArr.length > 1)
         console.log('werwer')
         console.log(wordy.value[0]);
-        console.log(topLeft[0] + ' '+ topLeft[1]);
-        console.log(wordy.value[1][6]);
+        //console.log(topLeft[0] + ' '+ topLeft[1]);
+        //console.log(wordy.value[1][6]);
           //console.log(wordy.value[1][6][1]);
           //if( wordy.value[1][0] == 'external:') { console.log(wordy.value[1][0]); break;}
 
             // If all of them are true then there is overlap.
-            // If just one is not true then there is no overlap
-          if( (topLeft[0] < wordy.value[1][6][0] &&
-              bottomRight[0] > wordy.value[1][5][0] &&
-              topLeft[1] < wordy.value[1][6][1] &&
-              bottomRight[1] > wordy.value[1][5][1]) || positionArr.length === 1 ) {
-             /************************************/
-             console.log('no overlap');
-             contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
-             bodyTest.removeChild(canvas);
 
-              } else {
-                console.log('aaaahhhhh');
-                console.log(wordy.value[1][0]);
-                createCanvasPositions();
-                continue restartLoop;
-              }
-      }
+            let compareX2 = wordy.value[1][6][0];
+            let compareX1 = wordy.value[1][5][0];
+            let compareY2 = wordy.value[1][6][1];
+            let compareY1 = wordy.value[1][5][1];
+
+            console.log('topLeftX '+ topLeft[0] + ' < cBottomRightX ' +  compareX2);
+            console.log('bottomRightX '+ bottomRight[0] +' >  ctopLeftX '+ compareX1);
+            console.log('topLeftY '+ topLeft[1] +' <  cbottomRightY '+ compareY2);
+            console.log('bottomRightY '+ bottomRight[1] +' > ctopLeftY '+ compareY1);
+
+          if( topLeft[0] < compareX2 &&
+              bottomRight[0] > compareX1 &&
+              topLeft[1] < compareY2 &&
+              bottomRight[1] > compareY1 ) {
+             /************************************/
+             count += 1;
+             console.log('continue restart ' + count);
+             createCanvasPositions();
+             if(count > 5000) { count = 0; console.log('50 break!!! ');break;}
+             continue restartLoop;
+
+
+          // } else if( !(topLeft[0] < wordy.value[1][6][0]) ||
+          //            !(bottomRight[0] > wordy.value[1][5][0]) ||
+          //            !(topLeft[1] < wordy.value[1][6][1]) ||
+          //            !(bottomRight[1] > wordy.value[1][5][1]) ) {
+          //       console.log('break');
+          //       console.log(wordy.value[1][0]);
+          //       createCanvasPositions();
+          //       continue restartLoop;
+
+            // If just one is false then there is no overlap
+          } else {
+            console.log('wordy next value');
+              console.log(wordy.value[0]);
+            wordy = iteratePostionArr.next();
+            count = 0;
+          //  console.log(wordy);
+          //  console.log(wordy.value[0]);
+            console.log('next');
+          }
+          if(iteratePostionArr.next().done) {
+            count = 0
+            console.log('break');
+            break;
+          }
+      };
       // if there is no overlap or it's the first word, print it.
-      // if (iteratePostionArr.next().done || positionArr.length === 1 ){
-      //   console.log('no overlap');
-      //   contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
-      //   bodyTest.removeChild(canvas);
-      // }
+      if (iteratePostionArr.next().done || positionArr.length === 1 ){
+        console.log('no overlap');
+        contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
+        bodyTest.removeChild(canvas);
+      }
 
 
       // for(let word of positionArr) {
@@ -228,7 +258,6 @@ let pushWordCanvasToMain = () => {
 let createCanvasPositions = () => {
   let positionX = ( Math.floor(Math.random() * canvasContainer['width']) );
   let positionY = ( Math.floor(Math.random() * canvasContainer['height']) );
-  count3 +=1;
   return [positionX, positionY];
 };
 

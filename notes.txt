@@ -68,7 +68,7 @@ Bottom Right:
 - Current problem: if it passes on the first word then it stops and doesn't check any of the other words before it. I think I need another loop in this one to scan over it before making a decision to push the word into the main canvas.
 -\-\-\-\-\-\-\-\-\-\-\-\-
 
-- Now I'm usig aniterator to check every word individually   while (!( wordy = iteratePostionArr.next()).done)
+- Now I'm using an iterator to check every word individually   while (!( wordy = iteratePostionArr.next()).done)
 -\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
 
 - need a proper break in the while loop so if my overlap check fails it breaks.
