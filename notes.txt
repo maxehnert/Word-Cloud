@@ -12,6 +12,8 @@ Found another example word cloud that uses the same approach but with the help o
 http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
 
 - Going by the above if I create separate canvas elements for each word I can then place them in the single large canvas and before placing the next one run a check to make sure there is no overlap.
+
+- if all of them are true then there is overlap. if just one of them is false then there is no overlap
 [
   if (RectA.X1 < RectB.X2 &&
       RectA.X2 > RectB.X1 &&
@@ -50,11 +52,32 @@ Bottom Left:
 Bottom Right:
 (44 + 528), (455 + 149)
 -----
+
 1. create individual canvas elements for each word. - done
  2. store them in an array
  - done
 3. map over the array and place them all in 1 new large canvas
 - done
 4. using the above check to make sure there is no overlap
-5. ???
-6. new project
+5. Check to make sure the full word in inside the main canvas element
+6. ???
+7. new project
+
+
+------
+- Current problem: if it passes on the first word then it stops and doesn't check any of the other words before it. I think I need another loop in this one to scan over it before making a decision to push the word into the main canvas.
+-\-\-\-\-\-\-\-\-\-\-\-\-
+
+- Now I'm usig aniterator to check every word individually   while (!( wordy = iteratePostionArr.next()).done)
+-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
+- need a proper break in the while loop so if my overlap check fails it breaks.
+- if the overlap check doesn't fail (no overlap on any existing words) then it prints the word.
+-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
+- what happens for the first word? it should fail right? so we want to skip the check on the first word
+-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
+- is the new coordinate generator working properly?
+I think I'm still unsure about this because the above wasn't working properly. It should become obvious once I get the above finished.
+------
