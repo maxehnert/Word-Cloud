@@ -64,19 +64,14 @@ let wordInputArray = string => {
   // Map over the array
   let logMap = (value, map) => {
 
-    var word = value[0];
+    let word = value[0];
 
     /* Set a font size based on it's position in the array.
      * The most frequent word will be the largest.
      * map count is incremental 0-9.
      * 0 is the lowest count word
      */
-    if ( map == 0 ) {
-      var fontSize = map + 0.5 * 16;
-    } else var fontSize = map * 16;
-      //console.log(map);
-
-    //console.log(value);
+     let fontSize = ((Math.log(map+1)*20) + 14);
 
     /*
      * Dynamically create Canvas elements for each word.
@@ -85,24 +80,43 @@ let wordInputArray = string => {
     canvas.className = "temp-word-canvas";
     canvas.id = word;
     canvas.style.zIndex = 8;
-    canvas.style.position = "absolute";
-    canvas.style.display = "none";
+    //canvas.style.position = "absolute";
+    //canvas.style.display = "none";
 
     var bodyTest = document.getElementsByTagName("body")[0];
     bodyTest.appendChild(canvas);
     var canvas = document.getElementById(word);
     var context = canvas.getContext("2d");
     context.font = `bold ${fontSize}px Arial`;
+
+    if(map % 2 == 0){
+
+     canvas.height = context.measureText(word).width;
+     canvas.width = fontSize + 5;
+     context.textBaseline = "hanging";
+        var tx = (context.measureText(word).width/2);
+        var ty = 5;
+        // Translate to near the center to rotate about the center
+        context.translate(tx,ty);
+        // Then rotate...
+        context.rotate(Math.PI / 2);
+        // Then translate back to draw in the right place!
+        context.translate(-tx,-ty);
+      } else{
+
     canvas.width = context.measureText(word).width;
 
     //TODO: This works for right now for getting the whole word in the element, but better to add a checker /A-Z/ and f,g,j,p and add height and offset based on a needed param.
     canvas.height = fontSize + 5;
+    context.textBaseline = "hanging";
+  }
     // Size noted above
     context.font = `bold ${fontSize}px Arial`;
     // This sets a random color for the word.
     context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
-    context.textBaseline = "hanging";
+
     context.fillText( word, 0, 5);
+
 
   };
 
@@ -110,7 +124,7 @@ let wordInputArray = string => {
 
   // Make sure this only runs when we have all the words in their own canvas el.
   if( document.getElementsByClassName("temp-word-canvas").length == wordCloud(string).length ) {
-    pushWordCanvasToMain();
+    //pushWordCanvasToMain();
   };
 };
 
@@ -137,18 +151,14 @@ let pushWordCanvasToMain = () => {
       // Make sure the word is completely visible within the main canvas
       while( ( canvasPostions[0] + canvas['width'] ) > canvasContainer['width'] ||
              ( canvasPostions[1] + canvas['height'] ) > canvasContainer['height'] ) {
-            countv +=1;
+
             if( !( canvasPostions[0] + canvas['width'] ) > canvasContainer['width'] &&
                 !( canvasPostions[1] + canvas['height'] ) > canvasContainer['height'] ){
                   console.log('its on the page');
                   break;
-                }
+                };
             canvasPostions = createCanvasPositions();
       };
-
-      console.log('countv '+ countv);
-      countv = 0;
-
 
       let topLeft = [ canvasPostions[0], canvasPostions[1] ]; //x1, y1
       let bottomRight = [ ( canvasPostions[0] + canvas['width'] ), ( canvasPostions[1] + canvas['height'] ) ]; // x2, y2
@@ -165,18 +175,18 @@ let pushWordCanvasToMain = () => {
     restartLoop:
     while(canvas && positionArr.length > 1) {
     //  while (!( wordy = iteratePostionArr.next()).done && positionArr.length > 1)
-        console.log('werwer')
-        console.log(wordy.value[0]);
+        //console.log('werwer')
+        //console.log(wordy.value[0]);
 
             let compareX2 = wordy.value[1][6][0];
             let compareX1 = wordy.value[1][5][0];
             let compareY2 = wordy.value[1][6][1];
             let compareY1 = wordy.value[1][5][1];
 
-            console.log('topLeftX '+ topLeft[0] + ' < cBottomRightX ' +  compareX2);
-            console.log('bottomRightX '+ bottomRight[0] +' >  ctopLeftX '+ compareX1);
-            console.log('topLeftY '+ topLeft[1] +' <  cbottomRightY '+ compareY2);
-            console.log('bottomRightY '+ bottomRight[1] +' > ctopLeftY '+ compareY1);
+            // console.log('topLeftX '+ topLeft[0] + ' < cBottomRightX ' +  compareX2);
+            // console.log('bottomRightX '+ bottomRight[0] +' >  ctopLeftX '+ compareX1);
+            // console.log('topLeftY '+ topLeft[1] +' <  cbottomRightY '+ compareY2);
+            // console.log('bottomRightY '+ bottomRight[1] +' > ctopLeftY '+ compareY1);
 
           // If all of them are true then there is overlap.
           if( topLeft[0] < compareX2 &&
@@ -187,24 +197,20 @@ let pushWordCanvasToMain = () => {
              count += 1;
              console.log('continue restart ' + count);
              createCanvasPositions();
-             if(count > 5000) { count = 0; console.log('5000 break!!! '); contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
-             bodyTest.removeChild(canvas); break;}
+             if(count > 10000) { count = 0; console.log('5000 break!!! ');  break;}
              continue restartLoop;
 
             // If just one is false then there is no overlap
           } else {
-            console.log('wordy next value');
-              console.log(wordy.value[0]);
             wordy = iteratePostionArr.next();
             count = 0;
+          };
 
-            console.log('next');
-          }
           if(iteratePostionArr.next().done) {
             count = 0
             console.log('break');
             break;
-          }
+          };
       };
       // if there is no overlap or it's the first word, print it.
       if (iteratePostionArr.next().done || positionArr.length === 1 ) {

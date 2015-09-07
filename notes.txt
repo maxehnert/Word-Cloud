@@ -61,3 +61,17 @@ Bottom Right:
 8. new project
 
 ------
+
+"finished"
+0: 454 topLeftX -
+1: 139 topLeftY -
+
+0: 676 bottomRightX -
+1: 201 bottomRightY -
+
+"starting"
+0: 546 topLeftX -
+1: 164 topLeftY -
+
+0: 749 bottomRightX -
+1: 224 bottomRightY -
