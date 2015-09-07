@@ -1,8 +1,8 @@
 'use strict';
 
 // Setup our main canvas container.
-let canvasContainer = document.getElementById("canvas-container");
-let contextContainer = canvasContainer.getContext("2d");
+var canvasContainer = document.getElementById('canvas-container');
+var contextContainer = canvasContainer.getContext('2d');
 
 /*
  * Main function for parsing the block of text and pulling out the 10 most used words.
@@ -73,7 +73,7 @@ let wordInputArray = string => {
      * 0 is the lowest count word
      * 20px is the smallest fontSize I want.
      */
-     if( map == 0 ) {
+     if( map === 0 ) {
        fontSize = 20;
      } else {
        fontSize +=5;
@@ -81,16 +81,16 @@ let wordInputArray = string => {
     /*
      * Dynamically create Canvas elements for each word.
     */
-    let canvas = document.createElement('canvas');
-    canvas.className = "temp-word-canvas";
+    var canvas = document.createElement('canvas');
+    canvas.className = 'temp-word-canvas';
     canvas.id = word;
     canvas.style.zIndex = 8;
-    canvas.style.display = "none";
+    canvas.style.display = 'none';
 
-    let bodyTest = document.getElementsByTagName("body")[0];
+    var bodyTest = document.getElementsByTagName('body')[0];
     bodyTest.appendChild(canvas);
-    let canvas = document.getElementById(word);
-    let context = canvas.getContext("2d");
+    var canvas = document.getElementById(word);
+    var context = canvas.getContext('2d');
     context.font = `bold ${fontSize}px Arial`;
     canvas.width = context.measureText(word).width;
 
@@ -100,22 +100,22 @@ let wordInputArray = string => {
     // Size noted above
     context.font = `bold ${fontSize}px Arial`;
     // This sets a random color for the word.
-    context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+    context.fillStyle = `hsl( ${Math.random() * 360}, 100%, 50%)`;
     context.fillText( word, 0, 5);
   };
 
   wordCloud(string).forEach(logMap);
 
   // Make sure this only runs when we have all the words in their own canvas el.
-  if( document.getElementsByClassName("temp-word-canvas").length == wordCloud(string).length ) {
+  if( document.getElementsByClassName('temp-word-canvas').length === wordCloud(string).length ) {
     pushWordCanvasToMain();
 
     /*
      * Temp fix for removing word canvas el that didn't get placed
      * Get rid of the words that didn't make it into the main canvas so we can run it again
     */
-    while( document.getElementsByClassName("temp-word-canvas").length ) {
-      let node = document.getElementsByClassName("temp-word-canvas")[0];
+    while( document.getElementsByClassName('temp-word-canvas').length ) {
+      let node = document.getElementsByClassName('temp-word-canvas')[0];
       if (node.parentNode) {
         node.parentNode.removeChild(node);
       };
@@ -134,7 +134,7 @@ let pushWordCanvasToMain = () => {
 
   // Reverse the order because we want to print the largest word first and sort around it
   wordCanvasArray = wordCanvasArray.reverse();
-  let bodyTest = document.getElementsByTagName("body")[0];
+  let bodyTest = document.getElementsByTagName('body')[0];
 
   let positionArr = [];
   let count = 0;
@@ -154,11 +154,11 @@ let pushWordCanvasToMain = () => {
     /*
      * Make sure the word is completely visible within the main canvas.
     */
-    while( ( canvasPostions[0] + canvas['width'] ) > canvasContainer['width'] ||
-           ( canvasPostions[1] + canvas['height'] ) > canvasContainer['height'] ) {
+    while( ( canvasPostions[0] + canvas.width ) > canvasContainer.width ||
+           ( canvasPostions[1] + canvas.height ) > canvasContainer.height ) {
 
-          if( !( canvasPostions[0] + canvas['width'] ) > canvasContainer['width'] &&
-              !( canvasPostions[1] + canvas['height'] ) > canvasContainer['height'] ) {
+          if( !( canvasPostions[0] + canvas.width ) > canvasContainer.width &&
+              !( canvasPostions[1] + canvas.height ) > canvasContainer.height ) {
                 //console.log('its on the page');
                 break;
           };
@@ -170,9 +170,9 @@ let pushWordCanvasToMain = () => {
      * The dimensions of each word are stored in an array (positionArr) which is iterated over below.
     */
     let topLeft = [ canvasPostions[0], canvasPostions[1] ]; //x1, y1
-    let bottomRight = [ ( canvasPostions[0] + canvas['width'] ), ( canvasPostions[1] + canvas['height'] ) ]; // x2, y2
+    let bottomRight = [ ( canvasPostions[0] + canvas.width ), ( canvasPostions[1] + canvas.height ) ]; // x2, y2
 
-    positionArr.push( [ canvas['id'], canvas['width'], canvas['height'], canvasPostions[0], canvasPostions[1], topLeft, bottomRight ] );
+    positionArr.push( [ canvas.id, canvas.width, canvas.height, canvasPostions[0], canvasPostions[1], topLeft, bottomRight ] );
 
     //console.log(positionArr); //Array[10] -> Array[7] == canvas['id'], canvas['width'], canvas['height'], positionX, positionY, topLeft, bottomRight
 
@@ -238,8 +238,8 @@ let pushWordCanvasToMain = () => {
  * Generate random coodinates based on the main canvas element.
 */
 let createCanvasPositions = () => {
-  let positionX = ( Math.floor( Math.random() * canvasContainer['width'] ) );
-  let positionY = ( Math.floor( Math.random() * canvasContainer['height'] ) );
+  let positionX = ( Math.floor( Math.random() * canvasContainer.width ) );
+  let positionY = ( Math.floor( Math.random() * canvasContainer.height ) );
   return [positionX, positionY];
 };
 
@@ -248,7 +248,7 @@ let createCanvasPositions = () => {
 */
 let submitButton = document.getElementsByClassName('sumbit-btn-js');
 
-submitButton[0].addEventListener( "click", () => {
+submitButton[0].addEventListener( 'click', () => {
   // Clear out the main canvas before push new words in on subsequent clicks.
   contextContainer.clearRect(0,0,1000,500);
 
