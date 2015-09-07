@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>word cloud</title>
+    <title>Word Cloud</title>
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
@@ -28,30 +28,22 @@
     <![endif]-->
 
     <div class="container">
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-        <h3 class="text-muted">word cloud</h3>
+
+      <div class="page-header">
+        <h1 class="title-js">Word Cloud</h1>
       </div>
 
-      <div class="jumbotron">
-        <h1>Word CLoud</h1>
-      </div>
-
-      <div class="row marketing">
-        <div class="col-lg-6">
-          <textarea name="name" rows="8" cols="40" class="text-input-js"></textarea>
-          <button class="btn sumbit-btn-js">Cloud</button>
-          <hr />
-          <div class="text-output-js"></div>
-
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <p>Paste some text below and a word cloud will display the most common words.</p>
+          <textarea name="name" rows="8" cols="80" class="text-input-js"></textarea>
+          <button class="btn sumbit-btn-js submit-btn">Generate the Word Cloud</button>
         </div>
+          <canvas id="canvas-container" class="col-md-8 col-md-offset-2" width="1000" height="500"></canvas>
       </div>
+
     </div>
-    <canvas id="canvas-container" width="1000" height="500"></canvas>
+
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -66,24 +58,10 @@
 
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
-    <!-- <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <script src="/bower_components/d3/d3.min.js"></script> -->
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js scripts/plugins.js -->
-    <!-- <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/affix.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/alert.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/dropdown.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/tooltip.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/modal.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/transition.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/button.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/popover.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/carousel.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/scrollspy.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/collapse.js"></script>
-    <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/tab.js"></script> -->
     <!-- endbuild -->
 
     <!-- build:js scripts/main.js -->

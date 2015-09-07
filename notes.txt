@@ -56,22 +56,11 @@ Bottom Right:
 4. using the above check to make sure there is no overlap
 - done
 5. Check to make sure the full word in inside the main canvas element
-6. Make it efficient!
-7. ???
-8. new project
+- done
+6. Rotate some words 90 degrees
+- see test branch for work in progress.
+7. Make it efficient!
+8. ???
+9. new project
 
 ------
-
-"finished"
-0: 454 topLeftX -
-1: 139 topLeftY -
-
-0: 676 bottomRightX -
-1: 201 bottomRightY -
-
-"starting"
-0: 546 topLeftX -
-1: 164 topLeftY -
-
-0: 749 bottomRightX -
-1: 224 bottomRightY -
