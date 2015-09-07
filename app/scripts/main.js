@@ -60,7 +60,9 @@ let wordCloud = string => {
  * Add styling to the words also.
 */
 let wordInputArray = string => {
-
+let fontSize;
+let fillTextX;
+let fillTextY;
   // Map over the array
   let logMap = (value, map) => {
 
@@ -70,9 +72,20 @@ let wordInputArray = string => {
      * The most frequent word will be the largest.
      * map count is incremental 0-9.
      * 0 is the lowest count word
+     * 14px is the smallest fontSize I want.
      */
-     let fontSize = ((Math.log(map+1)*20) + 14);
+     //let fontSize = ((Math.log(map+1)*20) + 14);
 
+     if(map == 0){
+       fontSize = 20;
+       fillTextX = 15;
+       fillTextY = 23;
+     } else {
+       fontSize +=5;
+       fillTextX -= 5;
+       fillTextY--;
+     }
+     console.log('map '+ map+' fontSize '+ fontSize);
     /*
      * Dynamically create Canvas elements for each word.
     */
@@ -89,35 +102,44 @@ let wordInputArray = string => {
     var context = canvas.getContext("2d");
     context.font = `bold ${fontSize}px Arial`;
 
-    if(map % 2 == 0){
+    if(map % 2 == 0) {
 
-     canvas.height = context.measureText(word).width;
-     canvas.width = fontSize + 5;
-     context.textBaseline = "hanging";
-        var tx = (context.measureText(word).width/2);
-        var ty = 5;
+     canvas.height = Math.ceil(context.measureText(word).width);
+     canvas.width = fontSize + 1;
+     context.textBaseline = "middle";
+        var tx = ( Math.ceil(context.measureText(word).width) / 2 );
+        var ty = (fontSize ) / 2;
         // Translate to near the center to rotate about the center
         context.translate(tx,ty);
         // Then rotate...
         context.rotate(Math.PI / 2);
-        // Then translate back to draw in the right place!
+        // Then translate back to draw in the right place
         context.translate(-tx,-ty);
-      } else{
 
-    canvas.width = context.measureText(word).width;
+        // Size noted above
+        context.font = `bold ${fontSize}px Arial`;
+        // This sets a random color for the word.
+        context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+         console.log(context.textBaseline);
+         console.log( 'measure text2 '+ Math.ceil(context.measureText(word).width));
+        console.log('height2 ' +canvas.height);
 
-    //TODO: This works for right now for getting the whole word in the element, but better to add a checker /A-Z/ and f,g,j,p and add height and offset based on a needed param.
-    canvas.height = fontSize + 5;
-    context.textBaseline = "hanging";
-  }
-    // Size noted above
-    context.font = `bold ${fontSize}px Arial`;
-    // This sets a random color for the word.
-    context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+        context.fillText( word, fillTextX, fillTextY);
 
-    context.fillText( word, 0, 5);
+      } else {
 
+        canvas.width = context.measureText(word).width;
 
+        //TODO: This works for right now for getting the whole word in the element, but better to add a checker /A-Z/ and f,g,j,p and add height and offset based on a needed param.
+        canvas.height = fontSize + 5;
+        context.textBaseline = "hanging";
+        // Size noted above
+        context.font = `bold ${fontSize}px Arial`;
+        // This sets a random color for the word.
+        context.fillStyle = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+
+        context.fillText( word, 0, 5);
+    }
   };
 
   wordCloud(string).forEach(logMap);
