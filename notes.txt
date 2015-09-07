@@ -6,12 +6,7 @@ Road Map
 
 - It needs to 'look random' but not actually be random. When it is random, they group too much. I need them to be randomly placed but each time remove the possibility of using the space that was already taken by the previous words.
 
-*Note: Jason Davies states this for his word cloud: Instead, we draw each word to a hidden canvas element, and retrieve the pixel data.
-
-Found another example word cloud that uses the same approach but with the help of an external library. This is the simplest approach I can think of currently.
-http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
-
-- Going by the above if I create separate canvas elements for each word I can then place them in the single large canvas and before placing the next one run a check to make sure there is no overlap.
+- If I create separate canvas elements for each word I can then place them in the single large canvas and before placing the next one run a check to make sure there is no overlap.
 
 - if all of them are true then there is overlap. if just one of them is false then there is no overlap
 [
@@ -59,25 +54,10 @@ Bottom Right:
 3. map over the array and place them all in 1 new large canvas
 - done
 4. using the above check to make sure there is no overlap
+- done
 5. Check to make sure the full word in inside the main canvas element
-6. ???
-7. new project
+6. Make it efficient!
+7. ???
+8. new project
 
-
-------
-- Current problem: if it passes on the first word then it stops and doesn't check any of the other words before it. I think I need another loop in this one to scan over it before making a decision to push the word into the main canvas.
--\-\-\-\-\-\-\-\-\-\-\-\-
-
-- Now I'm using an iterator to check every word individually   while (!( wordy = iteratePostionArr.next()).done)
--\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
-
-- need a proper break in the while loop so if my overlap check fails it breaks.
-- if the overlap check doesn't fail (no overlap on any existing words) then it prints the word.
--\-\-\-\-\-\-\-\-\-\-\-\-\-
-
-- what happens for the first word? it should fail right? so we want to skip the check on the first word
--\-\-\-\-\-\-\-\-\-\-\-\-\-
-
-- is the new coordinate generator working properly?
-I think I'm still unsure about this because the above wasn't working properly. It should become obvious once I get the above finished.
 ------

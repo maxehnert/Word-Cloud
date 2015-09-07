@@ -4,6 +4,7 @@
 var canvasContainer = document.getElementById("canvas-container");
 var contextContainer = canvasContainer.getContext("2d");
 var count = 0;
+var countv = 0;
 /*
  * Main function for parsing the block of text and pulling out the 10 most used words.
 */
@@ -130,11 +131,24 @@ let pushWordCanvasToMain = () => {
     for( let canvas of wordCanvasArray ) {
 
       console.log(canvas);
-      //console.log(canvas['id']);
-      //console.log(canvas['height']);
-
 
       let canvasPostions = createCanvasPositions();
+
+      // Make sure the word is completely visible within the main canvas
+      while( ( canvasPostions[0] + canvas['width'] ) > canvasContainer['width'] ||
+             ( canvasPostions[1] + canvas['height'] ) > canvasContainer['height'] ) {
+            countv +=1;
+            if( !( canvasPostions[0] + canvas['width'] ) > canvasContainer['width'] &&
+                !( canvasPostions[1] + canvas['height'] ) > canvasContainer['height'] ){
+                  console.log('its on the page');
+                  break;
+                }
+            canvasPostions = createCanvasPositions();
+      };
+
+      console.log('countv '+ countv);
+      countv = 0;
+
 
       let topLeft = [ canvasPostions[0], canvasPostions[1] ]; //x1, y1
       let bottomRight = [ ( canvasPostions[0] + canvas['width'] ), ( canvasPostions[1] + canvas['height'] ) ]; // x2, y2
@@ -147,16 +161,12 @@ let pushWordCanvasToMain = () => {
       //let wordy;
       let wordy = iteratePostionArr.next();
 
-    restartLoop:  while(canvas && positionArr.length > 1) {
+
+    restartLoop:
+    while(canvas && positionArr.length > 1) {
     //  while (!( wordy = iteratePostionArr.next()).done && positionArr.length > 1)
         console.log('werwer')
         console.log(wordy.value[0]);
-        //console.log(topLeft[0] + ' '+ topLeft[1]);
-        //console.log(wordy.value[1][6]);
-          //console.log(wordy.value[1][6][1]);
-          //if( wordy.value[1][0] == 'external:') { console.log(wordy.value[1][0]); break;}
-
-            // If all of them are true then there is overlap.
 
             let compareX2 = wordy.value[1][6][0];
             let compareX1 = wordy.value[1][5][0];
@@ -168,6 +178,7 @@ let pushWordCanvasToMain = () => {
             console.log('topLeftY '+ topLeft[1] +' <  cbottomRightY '+ compareY2);
             console.log('bottomRightY '+ bottomRight[1] +' > ctopLeftY '+ compareY1);
 
+          // If all of them are true then there is overlap.
           if( topLeft[0] < compareX2 &&
               bottomRight[0] > compareX1 &&
               topLeft[1] < compareY2 &&
@@ -176,18 +187,9 @@ let pushWordCanvasToMain = () => {
              count += 1;
              console.log('continue restart ' + count);
              createCanvasPositions();
-             if(count > 5000) { count = 0; console.log('50 break!!! ');break;}
+             if(count > 5000) { count = 0; console.log('5000 break!!! '); contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
+             bodyTest.removeChild(canvas); break;}
              continue restartLoop;
-
-
-          // } else if( !(topLeft[0] < wordy.value[1][6][0]) ||
-          //            !(bottomRight[0] > wordy.value[1][5][0]) ||
-          //            !(topLeft[1] < wordy.value[1][6][1]) ||
-          //            !(bottomRight[1] > wordy.value[1][5][1]) ) {
-          //       console.log('break');
-          //       console.log(wordy.value[1][0]);
-          //       createCanvasPositions();
-          //       continue restartLoop;
 
             // If just one is false then there is no overlap
           } else {
@@ -195,8 +197,7 @@ let pushWordCanvasToMain = () => {
               console.log(wordy.value[0]);
             wordy = iteratePostionArr.next();
             count = 0;
-          //  console.log(wordy);
-          //  console.log(wordy.value[0]);
+
             console.log('next');
           }
           if(iteratePostionArr.next().done) {
@@ -206,49 +207,11 @@ let pushWordCanvasToMain = () => {
           }
       };
       // if there is no overlap or it's the first word, print it.
-      if (iteratePostionArr.next().done || positionArr.length === 1 ){
+      if (iteratePostionArr.next().done || positionArr.length === 1 ) {
         console.log('no overlap');
         contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
         bodyTest.removeChild(canvas);
-      }
-
-
-      // for(let word of positionArr) {
-      //   console.log('topleft');
-      //   console.log(topLeft[0]);
-      //   console.log('word'); console.log(word);
-      //   // word[5] == topLeft array
-      //   // word[6] == bottomRight array
-      //
-      //   /*
-      //    * Overlap Detection
-      //    *
-      //    * Current problem: if it passes on the first word then it stops and doesn't check any of the other words before it. I think I need another loop in this one to scan over it before making a decision to push the word into the main canvas.
-      //    *
-      //    * I'm using swapped signs from my test case because I only want the word to print
-      //    * if there is NOT an overlap.
-      //    * If there IS overlap then I will generate new coordinates.
-      //    * Repeate this until it places the word.
-      //    * If the run time gets too long I will start excluding taken ranges from the random num generator.
-      //   */
-      //   if( topLeft[0] < word[6][0] &&
-      //       bottomRight[0] > word[5][0] &&
-      //       topLeft[1] < word[6][1] &&
-      //       bottomRight[1] > word[5][1] ) {
-      //       ////////////////////////////
-      //       count1 +=1;
-      //       createCanvasPositions();
-      //
-      //     } else {
-      //       count2 +=1;
-      //       // There is no collision so push the word into the canvas
-      //       contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
-      //       bodyTest.removeChild(canvas);
-      //       break;
-      //     }
-      //
-      // }
-
+      };
     };
 };
 
