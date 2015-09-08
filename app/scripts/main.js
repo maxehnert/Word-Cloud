@@ -40,7 +40,7 @@ let wordCloud = string => {
     let validLetters = /[a-z]/;
 
     // Push each key,value into an array of arrays
-    if( validLetters.test(word) ) {
+    if( validLetters.test(word) && word.length > 3 ) {
     	sortedWords.push( [word, wordObject[word]] );
     };
   };
@@ -254,3 +254,12 @@ submitButton[0].addEventListener( 'click', () => {
 
   wordInputArray(document.querySelector('textarea').value);
 }, false);
+
+/*
+ * Event listenser to fill the textarea
+*/
+let contentButton = document.getElementsByClassName('content-btn-js');
+
+contentButton[0].addEventListener( 'click', () => {
+  document.querySelector('textarea').value = randomContent;
+});

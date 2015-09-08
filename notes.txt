@@ -1,5 +1,21 @@
 Road Map
 
+1. create individual canvas elements for each word. - done
+ 2. store them in an array
+ - done
+3. map over the array and place them all in 1 new large canvas
+- done
+4. using the above check to make sure there is no overlap
+- done
+5. Check to make sure the full word in inside the main canvas element
+- done
+6. Rotate some words 90 degrees
+- see test branch for work in progress.
+7. Make it efficient!
+8. ???
+9. new project
+
+
 - I'm still only keeping 10 words so I can more easily work with the data, but would like to increase which will affect the next point.
 
 - I need to have realistic structure to placing the words in the canvas element without overlap.
@@ -48,19 +64,5 @@ Bottom Right:
 (44 + 528), (455 + 149)
 -----
 
-1. create individual canvas elements for each word. - done
- 2. store them in an array
- - done
-3. map over the array and place them all in 1 new large canvas
-- done
-4. using the above check to make sure there is no overlap
-- done
-5. Check to make sure the full word in inside the main canvas element
-- done
-6. Rotate some words 90 degrees
-- see test branch for work in progress.
-7. Make it efficient!
-8. ???
-9. new project
 
 ------

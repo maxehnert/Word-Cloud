@@ -11,13 +11,14 @@ $icon-font-path: '../fonts/';
   padding: 0.2em 0;
 }
 
-/* Space out content a bit */
 body {
   padding-top: 20px;
   padding-bottom: 20px;
   background-color: #EEEEEE;
+  font-family: 'Futura' 'Arial';
+  text-align: center;
 }
 
-.page-header {
-  text-align: center;
+p {
+  font-size: 18px;
 }
