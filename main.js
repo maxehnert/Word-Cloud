@@ -62,7 +62,7 @@ var wordCloud = function wordCloud(string) {
     var validLetters = /[a-z]/;
 
     // Push each key,value into an array of arrays
-    if (validLetters.test(word)) {
+    if (validLetters.test(word) && word.length > 3) {
       sortedWords.push([word, wordObject[word]]);
     };
   };
@@ -296,3 +296,9 @@ submitButton[0].addEventListener('click', function () {
 
   wordInputArray(document.querySelector('textarea').value);
 }, false);
+
+var contentButton = document.getElementsByClassName('content-btn-js');
+
+contentButton[0].addEventListener('click', function () {
+  document.querySelector('textarea').value = randomContent;
+});
