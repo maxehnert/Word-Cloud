@@ -55,6 +55,45 @@ let wordCloud = string => {
 };
 
 /*
+ * Create a Class for drawing our words to Canvas elements.
+*/
+
+class wordCanvas {
+
+  draw (word, fontSize) {
+
+    /*
+     * Dynamically create Canvas elements for each word.
+    */
+    var canvas = document.createElement('canvas');
+    canvas.className = 'temp-word-canvas';
+    canvas.id = word;
+    canvas.style.zIndex = 8;
+    //canvas.style.display = 'none';
+
+    var bodyTest = document.getElementsByTagName('body')[0];
+    bodyTest.appendChild(canvas);
+    var canvas = document.getElementById(word);
+    var context = canvas.getContext('2d');
+    context.font = `bold ${fontSize}px Arial`;
+    canvas.width = context.measureText(word).width;
+
+    //TODO: This works for right now for getting the whole word in the element, but better to add a checker /A-Z/ and f,g,j,p and add height and offset based on a needed param.
+    canvas.height = fontSize + 5;
+    context.textBaseline = "hanging";
+    // Size noted above
+    context.font = `bold ${fontSize}px Arial`;
+    // This sets a random color for the word.
+    context.fillStyle = `hsl( ${Math.random() * 360}, 100%, 50%)`;
+
+    // fillText is what draws it to the screen.
+    context.fillText( word, 0, 5);
+  };
+
+};
+
+
+/*
  * Use the array of [[word, count],..] to construct individual canvas elements for each word.
  * Add styling to the words also.
 */
@@ -78,30 +117,12 @@ let wordInputArray = string => {
      } else {
        fontSize +=5;
      };
-    /*
-     * Dynamically create Canvas elements for each word.
-    */
-    var canvas = document.createElement('canvas');
-    canvas.className = 'temp-word-canvas';
-    canvas.id = word;
-    canvas.style.zIndex = 8;
-    canvas.style.display = 'none';
 
-    var bodyTest = document.getElementsByTagName('body')[0];
-    bodyTest.appendChild(canvas);
-    var canvas = document.getElementById(word);
-    var context = canvas.getContext('2d');
-    context.font = `bold ${fontSize}px Arial`;
-    canvas.width = context.measureText(word).width;
-
-    //TODO: This works for right now for getting the whole word in the element, but better to add a checker /A-Z/ and f,g,j,p and add height and offset based on a needed param.
-    canvas.height = fontSize + 5;
-    context.textBaseline = "hanging";
-    // Size noted above
-    context.font = `bold ${fontSize}px Arial`;
-    // This sets a random color for the word.
-    context.fillStyle = `hsl( ${Math.random() * 360}, 100%, 50%)`;
-    context.fillText( word, 0, 5);
+     /*
+      * Create new Canvas element for each word.
+     */
+     var temporaryWordCanvas = new wordCanvas();
+     temporaryWordCanvas.draw(word, fontSize);
   };
 
   wordCloud(string).forEach(logMap);
