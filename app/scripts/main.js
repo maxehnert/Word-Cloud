@@ -170,30 +170,36 @@ let pushWordCanvasToMain = () => {
     //console.log(canvas);
 
     // These are the coordinates randomly generated.
-    let canvasPostions = createCanvasPositions();
+    let canvasCoordinates = createCanvasPositions();
+    //test
+    // let canvasCoordinates = new Positions();
+    // canvasCoordinates = canvasCoordinates.create();
 
     /*
      * Make sure the word is completely visible within the main canvas.
     */
-    while( ( canvasPostions[0] + canvas.width ) > canvasContainer.width ||
-           ( canvasPostions[1] + canvas.height ) > canvasContainer.height ) {
+    while( ( canvasCoordinates[0] + canvas.width ) > canvasContainer.width ||
+           ( canvasCoordinates[1] + canvas.height ) > canvasContainer.height ) {
 
-          if( !( canvasPostions[0] + canvas.width ) > canvasContainer.width &&
-              !( canvasPostions[1] + canvas.height ) > canvasContainer.height ) {
+          if( !( canvasCoordinates[0] + canvas.width ) > canvasContainer.width &&
+              !( canvasCoordinates[1] + canvas.height ) > canvasContainer.height ) {
                 //console.log('its on the page');
                 break;
           };
-          canvasPostions = createCanvasPositions();
+          canvasCoordinates = createCanvasPositions();
+
+          //test
+          //canvasCoordinates = canvasCoordinates.create();
     };
 
     /*
      * The next few lines build out dimenesions for the individual word's canvas el.
      * The dimensions of each word are stored in an array (positionArr) which is iterated over below.
     */
-    let topLeft = [ canvasPostions[0], canvasPostions[1] ]; //x1, y1
-    let bottomRight = [ ( canvasPostions[0] + canvas.width ), ( canvasPostions[1] + canvas.height ) ]; // x2, y2
+    let topLeft = [ canvasCoordinates[0], canvasCoordinates[1] ]; //x1, y1
+    let bottomRight = [ ( canvasCoordinates[0] + canvas.width ), ( canvasCoordinates[1] + canvas.height ) ]; // x2, y2
 
-    positionArr.push( [ canvas.id, canvas.width, canvas.height, canvasPostions[0], canvasPostions[1], topLeft, bottomRight ] );
+    positionArr.push( [ canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft, bottomRight ] );
 
     //console.log(positionArr); //Array[10] -> Array[7] == canvas['id'], canvas['width'], canvas['height'], positionX, positionY, topLeft, bottomRight
 
@@ -225,7 +231,11 @@ let pushWordCanvasToMain = () => {
 
            count += 1;
            //console.log('continue restart ' + count);
+
            createCanvasPositions();
+
+           //test
+           //canvasCoordinates.create();
 
            // If the count gets too high without finding a non-overlapping position, just kill it
            // It's a hack until I add memozation to the coordinant generator.
@@ -249,6 +259,8 @@ let pushWordCanvasToMain = () => {
     // if there is no overlap or it's the first word, print it.
     if ( iteratePostionArr.next().done || positionArr.length === 1 ) {
       //console.log('no overlap');
+      //test
+      //canvasCoordinates.store([topLeft,bottomRight]);
       contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
       bodyTest.removeChild(canvas);
     };
@@ -263,6 +275,19 @@ let createCanvasPositions = () => {
   let positionY = ( Math.floor( Math.random() * canvasContainer.height ) );
   return [positionX, positionY];
 };
+
+class Positions {
+  store (arr) {
+    var arrayStore = [];
+    arrayStore.push(arr);
+    console.log(arr);
+  }
+  create () {
+    let positionX = ( Math.floor( Math.random() * canvasContainer.width ) );
+    let positionY = ( Math.floor( Math.random() * canvasContainer.height ) );
+    return [positionX, positionY];
+  }
+}
 
 /*
  * Event listenser for our submit button.

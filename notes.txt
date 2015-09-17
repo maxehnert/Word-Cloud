@@ -64,5 +64,12 @@ Bottom Right:
 (44 + 528), (455 + 149)
 -----
 
+store the dimensions in an array? and build a grid that has all position available except those already taken.
+
+Then grab random numbers from the array of remaining positions.
+
+This should speed things up by multiple order of magnitude since the available positions array will keep getting smaller as new words are placed in.
+
+just use .slice() to remove the valid and used coordinate.
 
 ------
