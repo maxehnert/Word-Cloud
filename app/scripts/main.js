@@ -158,6 +158,7 @@ let pushWordCanvasToMain = () => {
   let bodyTest = document.getElementsByTagName('body')[0];
 
   let positionArr = [];
+  let usedCoordinatesArr = [];
   let count = 0;
 
   /*
@@ -166,22 +167,22 @@ let pushWordCanvasToMain = () => {
    *
    * canvas represents the actual canvas elements.
   */
-  for( let canvas of wordCanvasArray ) {
+  for ( let canvas of wordCanvasArray ) {
     //console.log(canvas);
 
     // These are the coordinates randomly generated.
     let canvasCoordinates = createCanvasPositions();
     //test
-    // let canvasCoordinates = new Positions();
-    // canvasCoordinates = canvasCoordinates.create();
+    //  var canvasCoordinates = new Positions();
+    //  canvasCoordinates = canvasCoordinates.create();
 
     /*
      * Make sure the word is completely visible within the main canvas.
     */
-    while( ( canvasCoordinates[0] + canvas.width ) > canvasContainer.width ||
+    while ( ( canvasCoordinates[0] + canvas.width ) > canvasContainer.width ||
            ( canvasCoordinates[1] + canvas.height ) > canvasContainer.height ) {
 
-          if( !( canvasCoordinates[0] + canvas.width ) > canvasContainer.width &&
+          if ( !( canvasCoordinates[0] + canvas.width ) > canvasContainer.width &&
               !( canvasCoordinates[1] + canvas.height ) > canvasContainer.height ) {
                 //console.log('its on the page');
                 break;
@@ -211,7 +212,7 @@ let pushWordCanvasToMain = () => {
      * the main canvas el without overlapping other words.
     */
     restartLoop:
-    while(canvas && positionArr.length > 1) {
+    while ( canvas && positionArr.length > 1 ) {
 
       let compareX2 = wordy.value[1][6][0];
       let compareX1 = wordy.value[1][5][0];
@@ -252,8 +253,7 @@ let pushWordCanvasToMain = () => {
       // In a perfect world it's ready to be drawn without overlap in the main canvas
       if( iteratePostionArr.next().done ) {
          count = 0;
-        //console.log('break');
-        break;
+         break;
       };
     };
     // if there is no overlap or it's the first word, print it.
@@ -261,10 +261,13 @@ let pushWordCanvasToMain = () => {
       //console.log('no overlap');
       //test
       //canvasCoordinates.store([topLeft,bottomRight]);
+      console.log('canvas '+ canvas.id + ' ' + topLeft);
+      usedCoordinatesArr.push([topLeft, bottomRight]);
       contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
       bodyTest.removeChild(canvas);
     };
   };
+  console.log(usedCoordinatesArr);
 };
 
 /*
@@ -277,6 +280,7 @@ let createCanvasPositions = () => {
 };
 
 class Positions {
+
   store (arr) {
     var arrayStore = [];
     arrayStore.push(arr);
@@ -295,8 +299,9 @@ class Positions {
 let submitButton = document.getElementsByClassName('sumbit-btn-js');
 
 submitButton[0].addEventListener( 'click', () => {
+
   // Clear out the main canvas before push new words in on subsequent clicks.
-  contextContainer.clearRect(0,0,1000,500);
+  contextContainer.clearRect( 0, 0, canvasContainer.width, canvasContainer.height );
 
   wordInputArray(document.querySelector('textarea').value);
 }, false);

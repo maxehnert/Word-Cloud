@@ -194,6 +194,7 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
   var bodyTest = document.getElementsByTagName('body')[0];
 
   var positionArr = [];
+  var usedCoordinatesArr = [];
   var count = 0;
 
   /*
@@ -213,28 +214,34 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
       //console.log(canvas);
 
       // These are the coordinates randomly generated.
-      var canvasPostions = createCanvasPositions();
+      var canvasCoordinates = createCanvasPositions();
+      //test
+      //  var canvasCoordinates = new Positions();
+      //  canvasCoordinates = canvasCoordinates.create();
 
       /*
        * Make sure the word is completely visible within the main canvas.
       */
-      while (canvasPostions[0] + canvas.width > canvasContainer.width || canvasPostions[1] + canvas.height > canvasContainer.height) {
-
-        if (!(canvasPostions[0] + canvas.width) > canvasContainer.width && !(canvasPostions[1] + canvas.height) > canvasContainer.height) {
+      while (canvasCoordinates[0] + canvas.width > canvasContainer.width || canvasCoordinates[1] + canvas.height > canvasContainer.height) {
+        console.log(canvasCoordinates);
+        if (!(canvasCoordinates[0] + canvas.width) > canvasContainer.width && !(canvasCoordinates[1] + canvas.height) > canvasContainer.height) {
           //console.log('its on the page');
           break;
         };
-        canvasPostions = createCanvasPositions();
+        canvasCoordinates = createCanvasPositions();
+
+        //test
+        //canvasCoordinates = canvasCoordinates.create();
       };
 
       /*
        * The next few lines build out dimenesions for the individual word's canvas el.
        * The dimensions of each word are stored in an array (positionArr) which is iterated over below.
       */
-      var topLeft = [canvasPostions[0], canvasPostions[1]]; //x1, y1
-      var bottomRight = [canvasPostions[0] + canvas.width, canvasPostions[1] + canvas.height]; // x2, y2
+      var topLeft = [canvasCoordinates[0], canvasCoordinates[1]]; //x1, y1
+      var bottomRight = [canvasCoordinates[0] + canvas.width, canvasCoordinates[1] + canvas.height]; // x2, y2
 
-      positionArr.push([canvas.id, canvas.width, canvas.height, canvasPostions[0], canvasPostions[1], topLeft, bottomRight]);
+      positionArr.push([canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft, bottomRight]);
 
       //console.log(positionArr); //Array[10] -> Array[7] == canvas['id'], canvas['width'], canvas['height'], positionX, positionY, topLeft, bottomRight
 
@@ -262,7 +269,11 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
 
           count += 1;
           //console.log('continue restart ' + count);
+
           createCanvasPositions();
+
+          //test
+          //canvasCoordinates.create();
 
           // If the count gets too high without finding a non-overlapping position, just kill it
           // It's a hack until I add memozation to the coordinant generator.
@@ -281,13 +292,16 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
         // In a perfect world it's ready to be drawn without overlap in the main canvas
         if (iteratePostionArr.next().done) {
           count = 0;
-          //console.log('break');
           break;
         };
       };
       // if there is no overlap or it's the first word, print it.
       if (iteratePostionArr.next().done || positionArr.length === 1) {
         //console.log('no overlap');
+        //test
+        //canvasCoordinates.store([topLeft,bottomRight]);
+        console.log('canvas ' + canvas.id + ' ' + topLeft);
+        usedCoordinatesArr.push([topLeft, bottomRight]);
         contextContainer.drawImage(canvas, topLeft[0], topLeft[1]);
         bodyTest.removeChild(canvas);
       };
@@ -308,6 +322,7 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
   }
 
   ;
+  console.log(usedCoordinatesArr);
 };
 
 /*
@@ -319,14 +334,40 @@ var createCanvasPositions = function createCanvasPositions() {
   return [positionX, positionY];
 };
 
-/*
- * Event listenser for our submit button.
-*/
+var Positions = (function () {
+  function Positions() {
+    _classCallCheck(this, Positions);
+  }
+
+  /*
+   * Event listenser for our submit button.
+  */
+
+  _createClass(Positions, [{
+    key: 'store',
+    value: function store(arr) {
+      var arrayStore = [];
+      arrayStore.push(arr);
+      console.log(arr);
+    }
+  }, {
+    key: 'create',
+    value: function create() {
+      var positionX = Math.floor(Math.random() * canvasContainer.width);
+      var positionY = Math.floor(Math.random() * canvasContainer.height);
+      return [positionX, positionY];
+    }
+  }]);
+
+  return Positions;
+})();
+
 var submitButton = document.getElementsByClassName('sumbit-btn-js');
 
 submitButton[0].addEventListener('click', function () {
+
   // Clear out the main canvas before push new words in on subsequent clicks.
-  contextContainer.clearRect(0, 0, 1000, 500);
+  contextContainer.clearRect(0, 0, canvasContainer.width, canvasContainer.height);
 
   wordInputArray(document.querySelector('textarea').value);
 }, false);

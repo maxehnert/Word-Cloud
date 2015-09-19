@@ -194,6 +194,7 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
   var bodyTest = document.getElementsByTagName('body')[0];
 
   var positionArr = [];
+  var usedCoordinatesArr = [];
   var count = 0;
 
   /*
@@ -215,14 +216,14 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
       // These are the coordinates randomly generated.
       var canvasCoordinates = createCanvasPositions();
       //test
-      // let canvasCoordinates = new Positions();
-      // canvasCoordinates = canvasCoordinates.create();
+      //  var canvasCoordinates = new Positions();
+      //  canvasCoordinates = canvasCoordinates.create();
 
       /*
        * Make sure the word is completely visible within the main canvas.
       */
       while (canvasCoordinates[0] + canvas.width > canvasContainer.width || canvasCoordinates[1] + canvas.height > canvasContainer.height) {
-
+        console.log(canvasCoordinates);
         if (!(canvasCoordinates[0] + canvas.width) > canvasContainer.width && !(canvasCoordinates[1] + canvas.height) > canvasContainer.height) {
           //console.log('its on the page');
           break;
@@ -291,7 +292,6 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
         // In a perfect world it's ready to be drawn without overlap in the main canvas
         if (iteratePostionArr.next().done) {
           count = 0;
-          //console.log('break');
           break;
         };
       };
@@ -300,6 +300,8 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
         //console.log('no overlap');
         //test
         //canvasCoordinates.store([topLeft,bottomRight]);
+        console.log('canvas ' + canvas.id + ' ' + topLeft);
+        usedCoordinatesArr.push([topLeft, bottomRight]);
         contextContainer.drawImage(canvas, topLeft[0], topLeft[1]);
         bodyTest.removeChild(canvas);
       };
@@ -320,6 +322,7 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
   }
 
   ;
+  console.log(usedCoordinatesArr);
 };
 
 /*
@@ -362,8 +365,9 @@ var Positions = (function () {
 var submitButton = document.getElementsByClassName('sumbit-btn-js');
 
 submitButton[0].addEventListener('click', function () {
+
   // Clear out the main canvas before push new words in on subsequent clicks.
-  contextContainer.clearRect(0, 0, 1000, 500);
+  contextContainer.clearRect(0, 0, canvasContainer.width, canvasContainer.height);
 
   wordInputArray(document.querySelector('textarea').value);
 }, false);
