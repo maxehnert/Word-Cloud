@@ -73,3 +73,22 @@ This should speed things up by multiple order of magnitude since the available p
 just use .slice() to remove the valid and used coordinate.
 
 ------
+
+Expanding on the above, I believe what the best scenario here is to build a matrix with all the numbers for the height and width of the main canvas.
+
+Random numbers are pulled from this.
+
+As new words are added you can remove those spots from the matrix.
+
+How do you stop the random number gen from selecting a null value though?
+
+for( let item of tempPosArr ) {
+  console.log(item[0] + ' ' + item[1])
+  var x = item[1][0] - item[0][0]
+  console.log('x ' + x)
+//  for( let innerI of item) {
+//    console.log(innerI[0] + ' ' + innerI[1])
+//  }
+}
+
+------

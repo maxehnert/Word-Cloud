@@ -4,6 +4,7 @@
 var canvasContainer = document.getElementById('canvas-container');
 var contextContainer = canvasContainer.getContext('2d');
 
+var tempPosArr = [];
 /*
  * Main function for parsing the block of text and pulling out the 10 most used words.
 */
@@ -158,9 +159,11 @@ let pushWordCanvasToMain = () => {
   let bodyTest = document.getElementsByTagName('body')[0];
 
   let positionArr = [];
-  let usedCoordinatesArr = [];
+
   let count = 0;
 
+  // This will keep track of where we are in the spiral;
+  var spiralAngle = 0;
   /*
    * Iterate over the wordCanvasArray we defined above.
    * Within this loop we check for overlap and draw the words into the main canvas.
@@ -171,10 +174,9 @@ let pushWordCanvasToMain = () => {
     //console.log(canvas);
 
     // These are the coordinates randomly generated.
-    let canvasCoordinates = createCanvasPositions();
-    //test
-    //  var canvasCoordinates = new Positions();
-    //  canvasCoordinates = canvasCoordinates.create();
+    //let canvasCoordinates = createCanvasPositions();
+
+    let canvasCoordinates = createSpiralPositions(spiralAngle);
 
     /*
      * Make sure the word is completely visible within the main canvas.
@@ -187,10 +189,10 @@ let pushWordCanvasToMain = () => {
                 //console.log('its on the page');
                 break;
           };
-          canvasCoordinates = createCanvasPositions();
-
-          //test
-          //canvasCoordinates = canvasCoordinates.create();
+          //canvasCoordinates = createCanvasPositions();
+if( count > 100000 || spiralAngle > 1000) { count = 0; spiralAngle = 0; console.log('in canvas ');  break;}
+          spiralAngle = spiralAngle + 20;
+          canvasCoordinates = createSpiralPositions(spiralAngle);
     };
 
     /*
@@ -206,13 +208,14 @@ let pushWordCanvasToMain = () => {
 
     let iteratePostionArr = positionArr.entries();
     let wordy = iteratePostionArr.next();
-
+console.log('restartLoop1');
     /*
      * This while loop runs for each word and places it in
      * the main canvas el without overlapping other words.
     */
     restartLoop:
     while ( canvas && positionArr.length > 1 ) {
+      console.log('restartLoop2');
 
       let compareX2 = wordy.value[1][6][0];
       let compareX1 = wordy.value[1][5][0];
@@ -233,41 +236,43 @@ let pushWordCanvasToMain = () => {
            count += 1;
            //console.log('continue restart ' + count);
 
-           createCanvasPositions();
+           //createCanvasPositions();
 
-           //test
-           //canvasCoordinates.create();
+           spiralAngle = spiralAngle + 20;
+           canvasCoordinates = createSpiralPositions(spiralAngle);
 
            // If the count gets too high without finding a non-overlapping position, just kill it
            // It's a hack until I add memozation to the coordinant generator.
-           if( count > 100000 ) { count = 0; console.log('5000 break!!! ');  break;}
+           if( count > 100000 || spiralAngle > 1000) { count = 0; spiralAngle = 0; console.log('5000 break!!! ');  break;}
            continue restartLoop;
 
       // If just one is false then there is no overlap
       } else {
         wordy = iteratePostionArr.next();
         count = 0;
+        spiralAngle = 0;
       };
 
       // Ok we've checked our current word against all other words.
       // In a perfect world it's ready to be drawn without overlap in the main canvas
       if( iteratePostionArr.next().done ) {
          count = 0;
+         spiralAngle = 0;
          break;
       };
     };
     // if there is no overlap or it's the first word, print it.
     if ( iteratePostionArr.next().done || positionArr.length === 1 ) {
       //console.log('no overlap');
-      //test
-      //canvasCoordinates.store([topLeft,bottomRight]);
-      console.log('canvas '+ canvas.id + ' ' + topLeft);
-      usedCoordinatesArr.push([topLeft, bottomRight]);
+
+      //console.log('canvas '+ canvas.id + ' ' + topLeft);
+
+      tempPosArr.push([topLeft, bottomRight]);
+
       contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
       bodyTest.removeChild(canvas);
     };
   };
-  console.log(usedCoordinatesArr);
 };
 
 /*
@@ -279,19 +284,24 @@ let createCanvasPositions = () => {
   return [positionX, positionY];
 };
 
-class Positions {
+// Start Spiral
+let createSpiralPositions = (increment) => {
+  var a = 1;
+  var b = 3;
+  // var centerx = contextContainer.canvas.width / 2;
+  // var centery = contextContainer.canvas.height / 2;
+  var centerx = 1000 / 2;
+  var centery = 500 / 2;
+console.log('increment '+ increment);
+  var angle = 0.1 * increment;
 
-  store (arr) {
-    var arrayStore = [];
-    arrayStore.push(arr);
-    console.log(arr);
-  }
-  create () {
-    let positionX = ( Math.floor( Math.random() * canvasContainer.width ) );
-    let positionY = ( Math.floor( Math.random() * canvasContainer.height ) );
-    return [positionX, positionY];
-  }
-}
+  var positionX = centerx + (a + b * angle) * Math.cos(angle);
+
+  var positionY = centery + (a + b * angle) * Math.sin(angle);
+
+  return [positionX, positionY];
+};
+// End Spiral
 
 /*
  * Event listenser for our submit button.
