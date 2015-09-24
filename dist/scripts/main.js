@@ -194,9 +194,11 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
   var bodyTest = document.getElementsByTagName('body')[0];
 
   var positionArr = [];
-  var usedCoordinatesArr = [];
+
   var count = 0;
 
+  // This will keep track of where we are in the spiral;
+  var spiralAngle = 0;
   /*
    * Iterate over the wordCanvasArray we defined above.
    * Within this loop we check for overlap and draw the words into the main canvas.
@@ -211,39 +213,42 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
     for (var _iterator2 = wordCanvasArray[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
       var canvas = _step2.value;
 
-      //console.log(canvas);
+      console.log(canvas);
 
       // These are the coordinates randomly generated.
-      var canvasCoordinates = createCanvasPositions();
-      //test
-      //  var canvasCoordinates = new Positions();
-      //  canvasCoordinates = canvasCoordinates.create();
+      //let canvasCoordinates = createCanvasPositions();
+
+      var canvasCoordinates = createSpiralPositions(spiralAngle);
 
       /*
        * Make sure the word is completely visible within the main canvas.
       */
       while (canvasCoordinates[0] + canvas.width > canvasContainer.width || canvasCoordinates[1] + canvas.height > canvasContainer.height) {
-        console.log(canvasCoordinates);
+
         if (!(canvasCoordinates[0] + canvas.width) > canvasContainer.width && !(canvasCoordinates[1] + canvas.height) > canvasContainer.height) {
           //console.log('its on the page');
           break;
         };
-        canvasCoordinates = createCanvasPositions();
 
-        //test
-        //canvasCoordinates = canvasCoordinates.create();
+        spiralAngle = spiralAngle + 20;
+        canvasCoordinates = createSpiralPositions(spiralAngle);
+
+        if (count > 500000 || spiralAngle > 1000) {
+          count = 0;spiralAngle = 0;console.log('in canvas ');break;
+        }
       };
 
       /*
        * The next few lines build out dimenesions for the individual word's canvas el.
        * The dimensions of each word are stored in an array (positionArr) which is iterated over below.
       */
+
       var topLeft = [canvasCoordinates[0], canvasCoordinates[1]]; //x1, y1
       var bottomRight = [canvasCoordinates[0] + canvas.width, canvasCoordinates[1] + canvas.height]; // x2, y2
 
       positionArr.push([canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft, bottomRight]);
 
-      //console.log(positionArr); //Array[10] -> Array[7] == canvas['id'], canvas['width'], canvas['height'], positionX, positionY, topLeft, bottomRight
+      //    console.log(positionArr); //Array[10] -> Array[7] == canvas['id'], canvas['width'], canvas['height'], positionX, positionY, topLeft, bottomRight
 
       var iteratePostionArr = positionArr.entries();
       var wordy = iteratePostionArr.next();
@@ -259,49 +264,62 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
         var compareY2 = wordy.value[1][6][1];
         var compareY1 = wordy.value[1][5][1];
 
-        // console.log('topLeftX '+ topLeft[0] + ' < cBottomRightX ' +  compareX2);
-        // console.log('bottomRightX '+ bottomRight[0] +' >  ctopLeftX '+ compareX1);
-        // console.log('topLeftY '+ topLeft[1] +' <  cbottomRightY '+ compareY2);
-        // console.log('bottomRightY '+ bottomRight[1] +' > ctopLeftY '+ compareY1);
+        //  console.log('topLeftX '+ topLeft[0] + ' < cBottomRightX ' +  compareX2);
+        //  console.log('bottomRightX '+ bottomRight[0] +' >  ctopLeftX '+ compareX1);
+        //  console.log('topLeftY '+ topLeft[1] +' <  cbottomRightY '+ compareY2);
+        //  console.log('bottomRightY '+ bottomRight[1] +' > ctopLeftY '+ compareY1);
 
         // If all of them are true then there is overlap.
         if (topLeft[0] < compareX2 && bottomRight[0] > compareX1 && topLeft[1] < compareY2 && bottomRight[1] > compareY1) {
 
           count += 1;
-          //console.log('continue restart ' + count);
 
-          createCanvasPositions();
+          console.log('IS THIS RIGHT? topLeftY ' + topLeft[1] + ' <  cbottomRightY ' + compareY2);
 
-          //test
-          //canvasCoordinates.create();
+          positionArr.pop();
+
+          spiralAngle = spiralAngle + 20;
+          canvasCoordinates = createSpiralPositions(spiralAngle);
+
+          var topLeft = [canvasCoordinates[0], canvasCoordinates[1]]; //x1, y1
+          var bottomRight = [canvasCoordinates[0] + canvas.width, canvasCoordinates[1] + canvas.height]; // x2, y2
+
+          positionArr.push([canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft, bottomRight]);
+          //console.log(positionArr);
 
           // If the count gets too high without finding a non-overlapping position, just kill it
           // It's a hack until I add memozation to the coordinant generator.
-          if (count > 100000) {
-            count = 0;console.log('5000 break!!! ');break;
+          if (count > 1000 || spiralAngle > 1080) {
+            count = 0;spiralAngle = 0;console.log('5000 break!!! ');break;
           }
+
           continue restartLoop;
 
           // If just one is false then there is no overlap
         } else {
+            console.log(positionArr);
+
+            console.log(' count ' + count);
             wordy = iteratePostionArr.next();
             count = 0;
-          };
 
-        // Ok we've checked our current word against all other words.
-        // In a perfect world it's ready to be drawn without overlap in the main canvas
-        if (iteratePostionArr.next().done) {
-          count = 0;
-          break;
-        };
+            // Ok we've checked our current word against all other words.
+            // In a perfect world it's ready to be drawn without overlap in the main canvas
+
+            if (wordy.done) {
+              console.log('wordy.done ' + iteratePostionArr.next().done);
+              console.log('canvasCoordinates ' + canvasCoordinates);
+              contextContainer.drawImage(canvas, topLeft[0], topLeft[1]);
+              bodyTest.removeChild(canvas);
+              count = 0;
+              spiralAngle = 0;
+              break;
+            };
+          };
       };
       // if there is no overlap or it's the first word, print it.
-      if (iteratePostionArr.next().done || positionArr.length === 1) {
-        //console.log('no overlap');
-        //test
-        //canvasCoordinates.store([topLeft,bottomRight]);
-        console.log('canvas ' + canvas.id + ' ' + topLeft);
-        usedCoordinatesArr.push([topLeft, bottomRight]);
+      if (positionArr.length === 1) {
+
         contextContainer.drawImage(canvas, topLeft[0], topLeft[1]);
         bodyTest.removeChild(canvas);
       };
@@ -322,7 +340,6 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
   }
 
   ;
-  console.log(usedCoordinatesArr);
 };
 
 /*
@@ -334,34 +351,28 @@ var createCanvasPositions = function createCanvasPositions() {
   return [positionX, positionY];
 };
 
-var Positions = (function () {
-  function Positions() {
-    _classCallCheck(this, Positions);
-  }
+// Start Spiral
+var createSpiralPositions = function createSpiralPositions(increment) {
+  var a = 1;
+  var b = 3;
+  // var centerx = contextContainer.canvas.width / 2;
+  // var centery = contextContainer.canvas.height / 2;
+  var centerx = 500 / 2;
+  var centery = 500 / 2;
+  console.log('increment ' + increment);
+  var angle = 0.1 * increment;
 
-  /*
-   * Event listenser for our submit button.
-  */
+  var positionX = centerx + (a + b * angle) * Math.cos(angle);
 
-  _createClass(Positions, [{
-    key: 'store',
-    value: function store(arr) {
-      var arrayStore = [];
-      arrayStore.push(arr);
-      console.log(arr);
-    }
-  }, {
-    key: 'create',
-    value: function create() {
-      var positionX = Math.floor(Math.random() * canvasContainer.width);
-      var positionY = Math.floor(Math.random() * canvasContainer.height);
-      return [positionX, positionY];
-    }
-  }]);
+  var positionY = centery + (a + b * angle) * Math.sin(angle);
 
-  return Positions;
-})();
+  return [positionX, positionY];
+};
+// End Spiral
 
+/*
+ * Event listenser for our submit button.
+*/
 var submitButton = document.getElementsByClassName('sumbit-btn-js');
 
 submitButton[0].addEventListener('click', function () {
