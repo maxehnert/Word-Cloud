@@ -138,17 +138,17 @@ var wordInputArray = function wordInputArray(string) {
   var fontSize = undefined;
 
   // Map over the array
-  var logMap = function logMap(value, map) {
+  var logMap = function logMap(value, index, x) {
 
     var word = value[0];
 
     /* Set a font size based on it's position in the array.
      * The most frequent word will be the largest.
-     * map count is incremental 0-9.
+     * index count is incremental 0-9.
      * 0 is the lowest count word
      * 20px is the smallest fontSize I want.
      */
-    if (map === 0) {
+    if (index === 0) {
       fontSize = 20;
     } else {
       fontSize += 5;
@@ -199,147 +199,214 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
 
   // This will keep track of where we are in the spiral;
   var spiralAngle = 0;
-  /*
-   * Iterate over the wordCanvasArray we defined above.
-   * Within this loop we check for overlap and draw the words into the main canvas.
-   *
-   * canvas represents the actual canvas elements.
-  */
-  var _iteratorNormalCompletion2 = true;
-  var _didIteratorError2 = false;
-  var _iteratorError2 = undefined;
 
-  try {
-    for (var _iterator2 = wordCanvasArray[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-      var canvas = _step2.value;
+  /***********START*******TEST***************/
 
-      console.log(canvas);
+  var positionArr1 = [];
 
-      // These are the coordinates randomly generated.
-      //let canvasCoordinates = createCanvasPositions();
+  // this iterates over each canvas element in the array of canvas elements
+  var testFunc = function testFunc(value, index, arr) {
+    //value = canvas element
+    //index = the array index
+    //arr = the array of canvas elements
+    //arr[index] = the canvas element
+    //value.id = this is the #id name of the word
+    var canvas = value;
 
-      var canvasCoordinates = createSpiralPositions(spiralAngle);
+    var canvasCoordinates = createSpiralPositions(spiralAngle);
 
-      /*
-       * Make sure the word is completely visible within the main canvas.
-      */
-      while (canvasCoordinates[0] + canvas.width > canvasContainer.width || canvasCoordinates[1] + canvas.height > canvasContainer.height) {
+    var topLeft1 = [canvasCoordinates[0], canvasCoordinates[1]]; //x1, y1
+    var bottomRight1 = [canvasCoordinates[0] + canvas.width, canvasCoordinates[1] + canvas.height]; // x2, y2
 
-        if (!(canvasCoordinates[0] + canvas.width) > canvasContainer.width && !(canvasCoordinates[1] + canvas.height) > canvasContainer.height) {
-          //console.log('its on the page');
-          break;
-        };
+    // this is a new array of coordinates. It should build in size with each time the forEach runs
+    positionArr1.push([canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft1, bottomRight1]);
+    //console.log(positionArr1); //Array[10] -> Array[7] == canvas['id'], canvas['width'], canvas['height'], positionX, positionY, topLeft, bottomRight
 
-        spiralAngle = spiralAngle + 20;
-        canvasCoordinates = createSpiralPositions(spiralAngle);
+    // For the first word just print it in the main canvas
+    if (index === 0) {
+      console.log('hiiii');
+      contextContainer.drawImage(canvas, topLeft1[0], topLeft1[1]);
+      bodyTest.removeChild(canvas);
+    } else {
+      positionArr1.forEach(function (value, index, array) {
+        // value = each positionArr1 element. this contains the entire coordinates. The last 'value' element is itself. so you need to not check the last one because it'll be comparing itself.
+        // index = the current index of the positionArr1 array.
+        // array = the entire positionArr1 array.
+        //  console.log('current word/last word? arr[arr.length - 1] '); console.log(array[array.length - 1]);
 
-        if (count > 500000 || spiralAngle > 1000) {
-          count = 0;spiralAngle = 0;console.log('in canvas ');break;
-        }
-      };
+        var compareX2 = value[6][0];
+        var compareX1 = value[5][0];
+        var compareY2 = value[6][1];
+        var compareY1 = value[5][1];
 
-      /*
-       * The next few lines build out dimenesions for the individual word's canvas el.
-       * The dimensions of each word are stored in an array (positionArr) which is iterated over below.
-      */
+        var currentWord = array[array.length - 1];
 
-      var topLeft = [canvasCoordinates[0], canvasCoordinates[1]]; //x1, y1
-      var bottomRight = [canvasCoordinates[0] + canvas.width, canvasCoordinates[1] + canvas.height]; // x2, y2
-
-      positionArr.push([canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft, bottomRight]);
-
-      //    console.log(positionArr); //Array[10] -> Array[7] == canvas['id'], canvas['width'], canvas['height'], positionX, positionY, topLeft, bottomRight
-
-      var iteratePostionArr = positionArr.entries();
-      var wordy = iteratePostionArr.next();
-
-      /*
-       * This while loop runs for each word and places it in
-       * the main canvas el without overlapping other words.
-      */
-      restartLoop: while (canvas && positionArr.length > 1) {
-
-        var compareX2 = wordy.value[1][6][0];
-        var compareX1 = wordy.value[1][5][0];
-        var compareY2 = wordy.value[1][6][1];
-        var compareY1 = wordy.value[1][5][1];
-
+        console.log('value[0] ' + value[0] + ' ' + 'currentWord ' + currentWord[0]);
         //  console.log('topLeftX '+ topLeft[0] + ' < cBottomRightX ' +  compareX2);
         //  console.log('bottomRightX '+ bottomRight[0] +' >  ctopLeftX '+ compareX1);
         //  console.log('topLeftY '+ topLeft[1] +' <  cbottomRightY '+ compareY2);
         //  console.log('bottomRightY '+ bottomRight[1] +' > ctopLeftY '+ compareY1);
 
         // If all of them are true then there is overlap.
-        if (topLeft[0] < compareX2 && bottomRight[0] > compareX1 && topLeft[1] < compareY2 && bottomRight[1] > compareY1) {
-
-          count += 1;
-
-          console.log('IS THIS RIGHT? topLeftY ' + topLeft[1] + ' <  cbottomRightY ' + compareY2);
-
-          positionArr.pop();
+        // Skip the last word because it'd be comparing itself to itself
+        restartThisLoop: while (currentWord[5][0] < compareX2 && currentWord[6][0] > compareX1 && currentWord[5][1] < compareY2 && currentWord[6][1] > compareY1 || value[0] !== currentWord[0]) {
 
           spiralAngle = spiralAngle + 20;
           canvasCoordinates = createSpiralPositions(spiralAngle);
 
           var topLeft = [canvasCoordinates[0], canvasCoordinates[1]]; //x1, y1
           var bottomRight = [canvasCoordinates[0] + canvas.width, canvasCoordinates[1] + canvas.height]; // x2, y2
-
-          positionArr.push([canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft, bottomRight]);
-          //console.log(positionArr);
-
-          // If the count gets too high without finding a non-overlapping position, just kill it
-          // It's a hack until I add memozation to the coordinant generator.
-          if (count > 1000 || spiralAngle > 1080) {
-            count = 0;spiralAngle = 0;console.log('5000 break!!! ');break;
-          }
-
-          continue restartLoop;
-
-          // If just one is false then there is no overlap
-        } else {
-            console.log(positionArr);
-
-            console.log(' count ' + count);
-            wordy = iteratePostionArr.next();
-            count = 0;
-
-            // Ok we've checked our current word against all other words.
-            // In a perfect world it's ready to be drawn without overlap in the main canvas
-
-            if (wordy.done) {
-              console.log('wordy.done ' + iteratePostionArr.next().done);
-              console.log('canvasCoordinates ' + canvasCoordinates);
-              contextContainer.drawImage(canvas, topLeft[0], topLeft[1]);
-              bodyTest.removeChild(canvas);
-              count = 0;
-              spiralAngle = 0;
-              break;
-            };
-          };
-      };
-      // if there is no overlap or it's the first word, print it.
-      if (positionArr.length === 1) {
-
-        contextContainer.drawImage(canvas, topLeft[0], topLeft[1]);
-        bodyTest.removeChild(canvas);
-      };
+          positionArr1.pop();
+          positionArr1.push([canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft, bottomRight]);
+          //  if ( !topLeft[0] < compareX2 ||
+          //       !bottomRight[0] > compareX1 ||
+          //       !topLeft[1] < compareY2 ||
+          //       !bottomRight[1] > compareY1 ) {
+          //          count = 0;
+          //          spiralAngle = 0;
+          //          break;
+          //   }
+          continue restartThisLoop;
+        }
+        if (value[0] === currentWord[0]) {
+          contextContainer.drawImage(canvas, currentWord[0], currentWord[1]);
+          bodyTest.removeChild(canvas);
+          count = 0;
+          spiralAngle = 0;
+        }
+      });
     }
-  } catch (err) {
-    _didIteratorError2 = true;
-    _iteratorError2 = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-        _iterator2['return']();
-      }
-    } finally {
-      if (_didIteratorError2) {
-        throw _iteratorError2;
-      }
-    }
-  }
+  };
 
-  ;
+  wordCanvasArray.forEach(testFunc);
+
+  /***********END****TEST***************/
+
+  /*
+   * Iterate over the wordCanvasArray we defined above.
+   * Within this loop we check for overlap and draw the words into the main canvas.
+   *
+   * canvas represents the actual canvas elements.
+  */
+  //   for ( let canvas of wordCanvasArray ) {
+  //     console.log(canvas);
+  //
+  //     // These are the coordinates randomly generated.
+  //     //let canvasCoordinates = createCanvasPositions();
+  //
+  //     let canvasCoordinates = createSpiralPositions(spiralAngle);
+  //
+  //     /*
+  //      * Make sure the word is completely visible within the main canvas.
+  //     */
+  //     while ( ( canvasCoordinates[0] + canvas.width ) > canvasContainer.width ||
+  //            ( canvasCoordinates[1] + canvas.height ) > canvasContainer.height ) {
+  //
+  //           if ( !( canvasCoordinates[0] + canvas.width ) > canvasContainer.width &&
+  //               !( canvasCoordinates[1] + canvas.height ) > canvasContainer.height ) {
+  //                 //console.log('its on the page');
+  //                 break;
+  //           };
+  //
+  //             spiralAngle = spiralAngle + 20;
+  //             canvasCoordinates = createSpiralPositions(spiralAngle);
+  //
+  //           if( count > 500000 || spiralAngle > 1000) {
+  //               count = 0; spiralAngle = 0; console.log('in canvas ');  break;
+  //             }
+  //
+  //
+  //     };
+  //
+  //     /*
+  //      * The next few lines build out dimenesions for the individual word's canvas el.
+  //      * The dimensions of each word are stored in an array (positionArr) which is iterated over below.
+  //     */
+  //
+  //     var topLeft = [ canvasCoordinates[0], canvasCoordinates[1] ]; //x1, y1
+  //     var bottomRight = [ ( canvasCoordinates[0] + canvas.width ), ( canvasCoordinates[1] + canvas.height ) ]; // x2, y2
+  //
+  //     positionArr.push( [ canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft, bottomRight ] );
+  //
+  // //    console.log(positionArr); //Array[10] -> Array[7] == canvas['id'], canvas['width'], canvas['height'], positionX, positionY, topLeft, bottomRight
+  //
+  //     //  var iteratePostionArr = positionArr.entries();
+  //     //  var wordy = iteratePostionArr.next();
+  //
+  //     /*
+  //      * This while loop runs for each word and places it in
+  //      * the main canvas el without overlapping other words.
+  //     */
+  //   //  while ( canvas && positionArr.length > 1 ) {
+  //
+  //         positionArr.forEach( function(i) {
+  //
+  //           let compareX2 = i[6][0];
+  //           let compareX1 = i[5][0];
+  //           let compareY2 = i[6][1];
+  //           let compareY1 = i[5][1];
+  //
+  //           let currentWord = positionArr[positionArr.length - 1 ];
+  //       //  console.log('topLeftX '+ topLeft[0] + ' < cBottomRightX ' +  compareX2);
+  //       //  console.log('bottomRightX '+ bottomRight[0] +' >  ctopLeftX '+ compareX1);
+  //       //  console.log('topLeftY '+ topLeft[1] +' <  cbottomRightY '+ compareY2);
+  //       //  console.log('bottomRightY '+ bottomRight[1] +' > ctopLeftY '+ compareY1);
+  //
+  //       // If all of them are true then there is overlap.
+  //       restartLoop:
+  //        while ( currentWord[5][0] < compareX2 &&
+  //                currentWord[6][0] > compareX1 &&
+  //                currentWord[5][1] < compareY2 &&
+  //                currentWord[6][1] > compareY1 ) {
+  //         // restartLoop:
+  //         //  while ( topLeft[0] < compareX2 &&
+  //         //          bottomRight[0] > compareX1 &&
+  //         //          topLeft[1] < compareY2 &&
+  //         //          bottomRight[1] > compareY1 ) {
+  //
+  //             count += 1;
+  //
+  //             //console.log('IS THIS RIGHT? topLeftY '+ topLeft[1] +' <  cbottomRightY '+ compareY2);
+  //
+  //             positionArr.pop();
+  //
+  //             spiralAngle = spiralAngle + 20;
+  //             canvasCoordinates = createSpiralPositions(spiralAngle);
+  //
+  //             var topLeft = [ canvasCoordinates[0], canvasCoordinates[1] ]; //x1, y1
+  //             var bottomRight = [ ( canvasCoordinates[0] + canvas.width ), ( canvasCoordinates[1] + canvas.height ) ]; // x2, y2
+  //
+  //             positionArr.push( [ canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft, bottomRight ] );
+  //
+  //             // If just one is false then there is no overlap
+  //             if ( !topLeft[0] < compareX2 ||
+  //                  !bottomRight[0] > compareX1 ||
+  //                  !topLeft[1] < compareY2 ||
+  //                  !bottomRight[1] > compareY1 ) {
+  //
+  //                     contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
+  //                     bodyTest.removeChild(canvas);
+  //                     count = 0;
+  //                     spiralAngle = 0;
+  //                     break;
+  //                  }
+  //
+  //              // If the count gets too high without finding a non-overlapping position, just kill it
+  //              // It's a hack until I add memozation to the coordinant generator.
+  //              if( count > 1000 || spiralAngle > 1080) { count = 0; spiralAngle = 0; console.log('5000 break!!! ');  break;}
+  //
+  //              continue restartLoop;
+  //
+  //       };
+  //     });//foreach
+  //     };
+  //     // if there is no overlap or it's the first word, print it.
+  //     if ( positionArr.length === 1 ) {
+  //
+  //       contextContainer.drawImage( canvas, topLeft[0], topLeft[1] );
+  //       bodyTest.removeChild(canvas);
+  //     };
+  //}; //while ( canvas && positionArr.length > 1 )
 };
 
 /*
@@ -359,7 +426,7 @@ var createSpiralPositions = function createSpiralPositions(increment) {
   // var centery = contextContainer.canvas.height / 2;
   var centerx = 500 / 2;
   var centery = 500 / 2;
-  console.log('increment ' + increment);
+  //console.log('increment '+ increment);
   var angle = 0.1 * increment;
 
   var positionX = centerx + (a + b * angle) * Math.cos(angle);
