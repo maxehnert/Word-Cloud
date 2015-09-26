@@ -249,7 +249,7 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
 
         // If all of them are true then there is overlap.
         // Skip the last word because it'd be comparing itself to itself
-        restartThisLoop: while (currentWord[5][0] < compareX2 && currentWord[6][0] > compareX1 && currentWord[5][1] < compareY2 && currentWord[6][1] > compareY1 || value[0] !== currentWord[0]) {
+        restartThisLoop: while (currentWord[5][0] < compareX2 && currentWord[6][0] > compareX1 && currentWord[5][1] < compareY2 && currentWord[6][1] > compareY1 && value[0] !== currentWord[0]) {
 
           spiralAngle = spiralAngle + 20;
           canvasCoordinates = createSpiralPositions(spiralAngle);
@@ -258,18 +258,19 @@ var pushWordCanvasToMain = function pushWordCanvasToMain() {
           var bottomRight = [canvasCoordinates[0] + canvas.width, canvasCoordinates[1] + canvas.height]; // x2, y2
           positionArr1.pop();
           positionArr1.push([canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft, bottomRight]);
-          //  if ( !topLeft[0] < compareX2 ||
-          //       !bottomRight[0] > compareX1 ||
-          //       !topLeft[1] < compareY2 ||
-          //       !bottomRight[1] > compareY1 ) {
-          //          count = 0;
-          //          spiralAngle = 0;
-          //          break;
-          //   }
-          continue restartThisLoop;
+          if (!topLeft[0] < compareX2 || !bottomRight[0] > compareX1 || !topLeft[1] < compareY2 || !bottomRight[1] > compareY1) {
+            console.log('is this working??');
+            break;
+          } else {
+            continue restartThisLoop;
+          }
         }
         if (value[0] === currentWord[0]) {
-          contextContainer.drawImage(canvas, currentWord[0], currentWord[1]);
+          console.log('value[0] === currentWord[0] ' + value[0]);
+          console.log(canvas);
+          console.log(currentWord);
+          console.log('currentWord[0] ' + currentWord[0] + ' ' + ' currentWord[1] ' + currentWord[1]);
+          contextContainer.drawImage(canvas, currentWord[3], currentWord[4]);
           bodyTest.removeChild(canvas);
           count = 0;
           spiralAngle = 0;
