@@ -184,7 +184,6 @@ let testFunc = ( value, index, arr ) => {
 
   // this is a new array of coordinates. It should build in size with each time the forEach runs
   positionArr1.push( [ canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft1, bottomRight1 ] );
-  //console.log(positionArr1); //Array[10] -> Array[7] == canvas['id'], canvas['width'], canvas['height'], positionX, positionY, topLeft, bottomRight
 
   // For the first word just print it in the main canvas
   if ( index === 0 ) {
@@ -219,30 +218,43 @@ let testFunc = ( value, index, arr ) => {
                currentWord[5][1] < compareY2 &&
                currentWord[6][1] > compareY1 &&
                value[0] !== currentWord[0]     ) {
-
-                 spiralAngle = spiralAngle + 20;
+                 count += 1;
+                 spiralAngle = spiralAngle + 100;
                  canvasCoordinates = createSpiralPositions(spiralAngle);
 
                  let topLeft = [ canvasCoordinates[0], canvasCoordinates[1] ]; //x1, y1
                  let bottomRight = [ ( canvasCoordinates[0] + canvas.width ), ( canvasCoordinates[1] + canvas.height ) ]; // x2, y2
                  positionArr1.pop()
                  positionArr1.push( [ canvas.id, canvas.width, canvas.height, canvasCoordinates[0], canvasCoordinates[1], topLeft, bottomRight ] );
-                 if ( !topLeft[0] < compareX2 ||
-                      !bottomRight[0] > compareX1 ||
-                      !topLeft[1] < compareY2 ||
-                      !bottomRight[1] > compareY1 ) {
-                        console.log('is this working??');
+                 if ( topLeft[0] > compareX2 ||
+                      bottomRight[0] < compareX1 ||
+                      topLeft[1] > compareY2 ||
+                      bottomRight[1] < compareY1 ) {
+                        // console.log('coordinate check');
+                        // console.log(value);
+                        // console.log('topLeft ' + topLeft + ' , ' + 'bottomRight '+ bottomRight);
+                        // console.log('end coordinate check');
+                        // console.log('is this working??');
+                        // console.log('value[0] '+ value[0] + ' ' + 'currentWord ' + currentWord[0]);
+                        console.log('count '+ count);
+                        console.log('spiral angle '+ spiralAngle);
+                         console.log('!topLeftX '+ topLeft[0] + ' > cBottomRightX ' +  compareX2);
+                         console.log('!bottomRightX '+ bottomRight[0] +' <  ctopLeftX '+ compareX1);
+                         console.log('!topLeftY '+ topLeft[1] +' >  cbottomRightY '+ compareY2); //
+                         console.log('!bottomRightY '+ bottomRight[1] +' < ctopLeftY '+ compareY1); //
+                        //return;
                          break;
                   } else {
                     continue restartThisLoop;
                   }
-
       }
       if( value[0] === currentWord[0] ){
         console.log('value[0] === currentWord[0] '+ value[0]);
         console.log(canvas);
         console.log(currentWord);
-        console.log('currentWord[0] '+ currentWord[0] + ' ' + ' currentWord[1] ' + currentWord[1]);
+        console.log('currentWord[3] '+ currentWord[3] + ' ' + ' currentWord[4] ' + currentWord[4]);
+        console.log('spiral angle '+ spiralAngle);
+        console.log('@@@@@@END@@@@@@@@');
         contextContainer.drawImage( canvas, currentWord[3], currentWord[4] );
         bodyTest.removeChild(canvas);
         count = 0;
@@ -397,8 +409,8 @@ let createCanvasPositions = () => {
 
 // Start Spiral
 let createSpiralPositions = (increment) => {
-  var a = 1;
-  var b = 3;
+  var a = 1; //1
+  var b = 2; //3
   // var centerx = contextContainer.canvas.width / 2;
   // var centery = contextContainer.canvas.height / 2;
   var centerx = 500 / 2;
@@ -414,6 +426,32 @@ let createSpiralPositions = (increment) => {
 };
 // End Spiral
 
+// Playing around drawing the fib spirals
+// let dotsFunc = (number) => {
+//   for(let i = 0; i < 1500; i += number) {
+//     let coords = createSpiralPositions(i, 1, 1);
+//
+//
+//     contextContainer.fillStyle = "red";
+//     contextContainer.fillText(i,coords[0], coords[1]);
+//   }
+//   for(let i = 0; i < 1500; i += number) {
+//     let coords = createSpiralPositions(i, 1, 2);
+//
+//
+//     contextContainer.fillStyle = "blue";
+//     contextContainer.fillText(i,coords[0], coords[1]);
+//   }
+//   for(let i = 0; i < 1500; i += number) {
+//     let coords = createSpiralPositions(i, 20, 1);
+//
+//
+//     contextContainer.fillStyle = "black";
+//     contextContainer.fillText(i,coords[0], coords[1]);
+//   }
+//
+// }
+// dotsFunc(20);
 /*
  * Event listenser for our submit button.
 */
